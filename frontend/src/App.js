@@ -1,15 +1,18 @@
 import React from "react";
 import SongSubmissionForm from "./components/SongSubmissionForm";
 import YouTubePlayer from "./components/YoutubePlayer";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainGame from "./components/MainGame";
 
 function App() {
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Guess the song</h1>
-      <SongSubmissionForm />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<SongSubmissionForm />} />
+        <Route path="/ingame" element={<MainGame />} />
+      </Routes>
+    </Router>
   );
-  // return <YouTubePlayer videoUrl={"https://www.youtube.com/watch?v=r6zIGXun57U&ab_channel=LeagueofLegends"}/>;
 }
 
 export default App;

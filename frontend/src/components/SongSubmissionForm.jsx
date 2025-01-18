@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const SongSubmissionForm = () => {
+  const navigate = useNavigate();
   const [round, setRound] = useState({"round": 10})
   const [songs, setSongs] = useState([{"name": "", "author": "", "url": "" }]);
   const [message, setMessage] = useState("");
@@ -34,10 +36,12 @@ const SongSubmissionForm = () => {
     } catch (err) {
       setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
     }
+    navigate('/ingame');
   };
 
   return (
     <div>
+      <h1>Guess the song</h1>
       <h2>Configure game</h2>
       <form onSubmit={handleSubmit}>
         <h3>Number of Rounds</h3>
