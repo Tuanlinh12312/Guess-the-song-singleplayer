@@ -9,3 +9,5 @@ type Song struct {
 var SongList []Song
 var CrrSong int
 var Round int
+var GuessName string
+var GuessAuthor string
