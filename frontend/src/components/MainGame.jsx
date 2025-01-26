@@ -15,7 +15,7 @@ const MainGame = () => {
         setGuessAuthor({"author": value});
       }
     
-    const handleSubmitnamw = async (e) => {
+    const handleSubmit = async (e) => {
          e.preventDefault();
          try {
            const response = await axios.post("http://localhost:8080/GuessName", {name: GuessName});
@@ -23,9 +23,6 @@ const MainGame = () => {
          } catch (err) {
            setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
          }
-         }
-    const handleSubmitauthor = async (e) => {
-          e.preventDefault();
           try {
             const response = await axios.post("http://localhost:8080/GuessAuthor", {author: GuessAuthor});
             setMessage(response.data.message);
@@ -33,6 +30,11 @@ const MainGame = () => {
             setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
           }
           }
+    const handleKeyPress = (event) => {
+            if (event.key === 'Enter') {
+              handleSubmit(event); // Submit the form if "Enter" is pressed
+            }
+          };
 
     return (
         <div>
@@ -44,13 +46,14 @@ const MainGame = () => {
                 type="text"
                 placeholder="Song Name"
                 onChange={(e) => handleGuessNameChange(e.target.value)}
+                onKeyPress={handleKeyPress}
             /> 
             <input
                 type="text"
                 placeholder="Author"
                 onChange={(e) => handleGuessAuthorChange(e.target.value)}
+                onKeyPress={handleKeyPress}
             />   
-            <button type="submit">Submit</button>
             </form>
             {message && <p>{message}</p>}
         </div>
