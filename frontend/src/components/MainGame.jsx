@@ -15,7 +15,7 @@ const MainGame = () => {
         setGuessAuthor({"author": value});
       }
     
-    const handleSubmit = async (e) => {
+    const handleSubmitnamw = async (e) => {
          e.preventDefault();
          try {
            const response = await axios.post("http://localhost:8080/GuessName", {name: GuessName});
@@ -23,13 +23,16 @@ const MainGame = () => {
          } catch (err) {
            setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
          }
-         try {
-             const response = await axios.post("http://localhost:8080/GuessAuthor", {author: GuessAuthor});
-             setMessage(response.data.message);
-           } catch (err) {
-             setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
-           }
          }
+    const handleSubmitauthor = async (e) => {
+          e.preventDefault();
+          try {
+            const response = await axios.post("http://localhost:8080/GuessAuthor", {author: GuessAuthor});
+            setMessage(response.data.message);
+          } catch (err) {
+            setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
+          }
+          }
 
     return (
         <div>
