@@ -2,15 +2,15 @@ package controller
 
 import (
 	"App/database"
-	"net/http"
 	"math/rand"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func StartGame(c *gin.Context) {
 	// initialize crrSong
-	database.CrrSong = 0
+	database.CrrSong = -1
 
 	// shuffle song list
 	for i := len(database.SongList) - 1; i > 0; i-- {
