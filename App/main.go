@@ -13,6 +13,7 @@ func main() {
 	router.Use(cors.Default())
 	router.POST("/songs", controller.UploadSongs)
 	router.POST("/round", controller.SetRound)
+	router.PUT("/start", controller.StartGame)
 	router.POST("/GuessName", controller.ValidateName)
 	router.POST("/GuessAuthor", controller.ValidateAuthor)
 	router.PATCH("/NextSong", controller.NextSong)

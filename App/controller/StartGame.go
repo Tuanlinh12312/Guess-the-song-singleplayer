@@ -2,6 +2,7 @@ package controller
 
 import (
 	"App/database"
+	"fmt"
 	"math/rand"
 	"net/http"
 
@@ -11,6 +12,8 @@ import (
 func StartGame(c *gin.Context) {
 	// initialize crrSong
 	database.CrrSong = -1
+
+	fmt.Println(database.Round)
 
 	// shuffle song list
 	for i := len(database.SongList) - 1; i > 0; i-- {

@@ -8,7 +8,6 @@ import (
 )
 
 func NextSong(c *gin.Context) {
-	println("getting next song")
 	database.CrrSong++
 
 	if database.Round == database.CrrSong {

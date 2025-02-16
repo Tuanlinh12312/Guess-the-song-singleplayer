@@ -4,9 +4,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 const SongSubmissionForm = () => {
   const navigate = useNavigate();
-  const [round, setRound] = useState({"round": 10})
-  const [songs, setSongs] = useState([{"name": "", "author": "", "url": "" }]);
-  const [message, setMessage] = useState("");
+  const [round, setRound] = useState({ round: 10 });
+  const [songs, setSongs] = useState([{ name: "", author: "", url: "" }]);
 
   const handleChange = (index, field, value) => {
     const updatedSongs = [...songs];
@@ -15,28 +14,40 @@ const SongSubmissionForm = () => {
   };
 
   const handleRoundChange = (value) => {
-    setRound({"round": +value});
-  }
+    setRound({ round: +value });
+  };
 
   const addSong = () => {
-    setSongs([...songs, { "name": "", "author": "", "url": "" }]);
+    setSongs([...songs, { name: "", author: "", url: "" }]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:8080/songs", songs);
-      setMessage(response.data.message);
+      console.log(response.data.message);
     } catch (err) {
-      setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
+      console.log(
+        `Error: ${err.response?.data?.error || "Something went wrong"}`
+      );
     }
     try {
       const response = await axios.post("http://localhost:8080/round", round);
-      setMessage(response.data.message);
+      console.log(response.data.message);
     } catch (err) {
-      setMessage(`Error: ${err.response?.data?.error || "Something went wrong"}`);
+      console.log(
+        `Error: ${err.response?.data?.error || "Something went wrong"}`
+      );
     }
-    navigate('/ingame');
+    try {
+      const response = await axios.put("http://localhost:8080/start");
+      console.log(response.data.message);
+    } catch (err) {
+      console.log(
+        `Error: ${err.response?.data?.error || "Something went wrong"}`
+      );
+    }
+    navigate("/ingame");
   };
 
   return (
@@ -78,7 +89,6 @@ const SongSubmissionForm = () => {
         </button>
         <button type="submit">Start Game</button>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 };

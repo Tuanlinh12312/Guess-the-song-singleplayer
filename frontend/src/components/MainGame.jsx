@@ -8,8 +8,8 @@ const MainGame = () => {
   const [message, setMessage] = useState("");
   const [Round, setRound] = useState(0);
   const [SongURL, setSongURL] = useState("");
-  const [NameGuessed, setNameGuessed] = useState(false);
-  const [AuthorGuessed, setAuthorGuessed] = useState(false);
+  const [NameGuessed, setNameGuessed] = useState(true);
+  const [AuthorGuessed, setAuthorGuessed] = useState(true);
 
   const handleGuessNameChange = (value) => {
     setGuessName({ name: value });
@@ -20,19 +20,22 @@ const MainGame = () => {
   };
 
   const NextRound = async () => {
-    console.log("sus");
-    try {
-      console.log("getting next round");
-      const response = await axios.patch("http://localhost:8080/NextSong");
-      setMessage(response.data.message);
-      if (response.data.next) {
-        setRound(Round + 1);
-        setSongURL(response.data.url);
+    if (NameGuessed && AuthorGuessed) {
+      console.log("sus");
+      setNameGuessed(false);
+      setAuthorGuessed(false);
+      try {
+        const response = await axios.patch("http://localhost:8080/NextSong");
+        setMessage(response.data.message);
+        if (response.data.next) {
+          setRound(Round + 1);
+          setSongURL(response.data.url);
+        }
+      } catch (err) {
+        setMessage(
+          `Error: ${err.response?.data?.error || "Something went wrong"}`
+        );
       }
-    } catch (err) {
-      setMessage(
-        `Error: ${err.response?.data?.error || "Something went wrong"}`
-      );
     }
   };
 
@@ -40,17 +43,14 @@ const MainGame = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       try {
-        const response = await axios.post("http://localhost:8080/GuessName", {
-          name: GuessName,
-        });
+        const response = await axios.post(
+          "http://localhost:8080/GuessName",
+          GuessName
+        );
         setMessage(response.data.message);
         if (response.data.correct) {
           setNameGuessed(true);
-          if (AuthorGuessed) {
-            setNameGuessed(false);
-            setAuthorGuessed(false);
-            NextRound();
-          }
+          if (AuthorGuessed) NextRound();
         }
       } catch (err) {
         setMessage(
@@ -64,17 +64,14 @@ const MainGame = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       try {
-        const response = await axios.post("http://localhost:8080/GuessAuthor", {
-          author: GuessAuthor,
-        });
+        const response = await axios.post(
+          "http://localhost:8080/GuessAuthor",
+          GuessAuthor
+        );
         setMessage(response.data.message);
         if (response.data.correct) {
           setAuthorGuessed(true);
-          if (NameGuessed) {
-            setNameGuessed(false);
-            setAuthorGuessed(false);
-            NextRound();
-          }
+          if (NameGuessed) NextRound();
         }
       } catch (err) {
         setMessage(

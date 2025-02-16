@@ -17,7 +17,6 @@ func SetRound(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	database.Round = req.Round
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Set round!",
