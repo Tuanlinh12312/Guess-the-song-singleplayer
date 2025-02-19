@@ -20,6 +20,6 @@ func ValidateName(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "correctly guessed song name",
-		"correct": req.Name == database.SongList[database.CrrSong].Name,
+		"correct": req.Name == database.SongList[database.CrrSong].Title,
 	})
 }

@@ -7,8 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UploadSongs(c *gin.Context) {
-	// get song list
+func UploadSong(c *gin.Context) {
 	if err := c.ShouldBindJSON(&database.SongList); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

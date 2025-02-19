@@ -1,9 +1,9 @@
 package database
 
 type Song struct {
-	Name   string `json:"name"`
-	Author string `json:"author"`
-	URL    string `json:"url"`
+	Title    string   `json:"title"`
+	Artists []string `json:"artists"`
+	URL     string   `json:"url"`
 }
 
 var SongList []Song

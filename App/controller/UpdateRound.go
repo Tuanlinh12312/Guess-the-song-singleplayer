@@ -7,19 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ValidateAuthor(c *gin.Context) {
+func UpdateRound(c *gin.Context) {
 	var req struct {
-		Author string `json:"author"`
+		Round int `json:"round"`
 	}
 
-	// get name guess
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	database.Round = req.Round
 	c.JSON(http.StatusOK, gin.H{
-		"message": "correctly guessed song author",
-		"correct": req.Author == database.SongList[database.CrrSong].Author,
+		"message": "Set round!",
+		"count":   req.Round,
 	})
 }
