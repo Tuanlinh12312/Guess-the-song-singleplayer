@@ -1,9 +1,11 @@
+import DisplaySong from "./DisplaySong"
+
 const SongList = ({ songs, onDeleteSong }) => {
     return (
       <ul>
         {songs.map((song, index) => (
           <li key={index}>
-            {song}  
+            <DisplaySong title={song.title} artists={song.artists}></DisplaySong>
             <button onClick={() => onDeleteSong(index)}>❌</button>
           </li>
         ))}
