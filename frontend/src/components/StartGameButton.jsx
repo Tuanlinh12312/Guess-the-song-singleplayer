@@ -43,7 +43,7 @@ const StartGameButton = ({ rounds, songs }) => {
   };
 
   return (
-    <button onClick={handleStartGame} disabled={loading}>
+    <button class = "text-center" onClick={handleStartGame} disabled={loading}>
       {loading ? "Starting..." : "Start Game"}
     </button>
   );

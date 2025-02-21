@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.frame {
+  border: 5px solid black;
+  border-radius: 15px; /* Rounds the corners of the frame */
+  padding: 20px;
+  margin: 20px;
+}

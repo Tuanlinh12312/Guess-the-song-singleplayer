@@ -4,24 +4,19 @@ const RoundInput = ({ onSetRounds }) => {
   const [rounds, setRounds] = useState("");
 
   const handleChange = (e) => {
-    setRounds(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSetRounds(Number(rounds)); 
+    const newRounds = e.target.value;
+    setRounds(newRounds);
+    onSetRounds(Number(newRounds));
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="number"
-        placeholder="Number of rounds"
-        value={rounds}
-        onChange={handleChange}
-      />
-      <button type="submit">Set Rounds</button>
-    </form>
+    <input
+      type="number"
+      placeholder="Number of rounds"
+      value={rounds}
+      onChange={handleChange}
+      class="border border-gray-300 rounded py-1 w-full"
+    />
   );
 };
 

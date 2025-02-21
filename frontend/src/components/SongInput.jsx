@@ -21,6 +21,7 @@ const SongInput = ({ onAddSong }) => {
         placeholder="Enter song URL"
         value={songUrl}
         onChange={handleChange}
+        class="border border-gray-300 rounded py-1 w-full"
       />
       <button type="submit">Add Song</button>
     </form>
