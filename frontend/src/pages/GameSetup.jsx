@@ -44,7 +44,7 @@ const GameSetup = () => {
       <h1 class="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] tracking-wide text-center w-full uppercase text-white">
         Guess the song
       </h1>
-      <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-40px)] h-2/3">
+      <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-40px)] h-[calc(66.67%+10px)]">
         <div class="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1 mt-3">
           <div class="flex items-start w-full mb-6">
             <div class="flex flex-col px-6 w-full overflow-y-auto">
@@ -63,6 +63,11 @@ const GameSetup = () => {
             </div>
           </div>
         </div>
+        <img
+        src="/images/icon.png"
+        alt="Icon"
+        className="w-64 h-64 object-contain scale-150 -mt-[50px] "
+      />
       </div>
       <SongList songs={songs} onDeleteSong={handleDeleteSong} />
       <StartGameButton rounds={rounds} songs={songs} />

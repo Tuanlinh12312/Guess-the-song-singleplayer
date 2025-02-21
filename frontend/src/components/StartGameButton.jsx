@@ -55,13 +55,21 @@ const StartGameButton = ({ rounds, songs, time }) => {
 
   return (
     <div class="flex flex-col justify-start items-center mr-10 ml-auto">
-      <div class="w-[calc(50%-40px)] flex flex-col items-center justify-start mt-4 ml-auto">
-        <button class = "text-center" onClick={handleStartGame} disabled={loading}>
-          {loading ? "Starting..." : "Start Game"}
-        </button>
-      </div>
+    <div class="flex flex-col items-center mt-4"> 
+    <button class="flex justify-center items-center mt-3"
+    onClick={handleStartGame} disabled={loading}>
+    <img 
+      src="/images/icon1.png" 
+      alt="background" 
+      className="absolute w-52 mt-3 object-cover z-0" 
+    />
+    <span className="relative z-10 font-darumadrop text-3xl text-black mt-1 mr-3 text-center">
+        {loading ? "Starting..." : "Start"}
+      </span>
+    </button>
+    </div>
     </div>
   );
-};
+}
 
 export default StartGameButton;
