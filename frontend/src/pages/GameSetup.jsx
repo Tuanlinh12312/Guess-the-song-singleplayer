@@ -74,7 +74,7 @@ const GameSetup = () => {
       />
       </div>
       </div>
-      <StartGameButton rounds={rounds} songs={songs} />
+      <StartGameButton rounds={rounds} songs={songs} time={time}/>
     </div>
     // </body>
   );

@@ -36,12 +36,25 @@ func fixTitle(title *string, artists *[]string) {
 	*title = brackets.ReplaceAllString(*title, "")
 }
 
+func extractSongInfo(t *ytmusic.TrackItem) database.Song {
+	var song database.Song
+	song.Title = t.Title
+	song.Artists = make([]string, 0)
+
+	for _, artist := range t.Artists {
+		song.Artists = append(song.Artists, artist.Name)
+	}
+	fixTitle(&song.Title, &song.Artists)
+
+	song.Thumbnail = t.Thumbnails[0].URL
+	return song
+}
+
 func GetNameArtist(c *gin.Context) {
 	var song database.Song
 	if err := c.ShouldBindJSON(&song); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-	fmt.Println(song.URL)
 
 
 	videoID, err := extractVideoID(song.URL)
@@ -61,12 +74,7 @@ func GetNameArtist(c *gin.Context) {
 		return
 	}
 
-	song.Title = result[0].Title
-	song.Artists = make([]string, 0)
-	for _, artist := range result[0].Artists {
-		song.Artists = append(song.Artists, artist.Name)
-	}
-	fixTitle(&song.Title, &song.Artists)
+	song = extractSongInfo(result[0]);
 
 	c.JSON(http.StatusOK, gin.H{
 		"song": song,

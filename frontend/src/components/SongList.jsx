@@ -7,7 +7,7 @@ const SongList = ({ songs, onDeleteSong }) => {
         {songs.map((song, index) => (
           <li key={index}
           class="bg-song bg-contain bg-no-repeat w-full min-h-[120px] overflow-hidden flex flex-col justify-center items-center p-4 text-white">
-            <DisplaySong title={song.title} artists={song.artists}></DisplaySong>
+            <DisplaySong title={song.title} artists={song.artists} thumbnail={song.thumbnail}></DisplaySong>
             <button onClick={() => onDeleteSong(index)}>❌</button>
           </li>
         ))}
