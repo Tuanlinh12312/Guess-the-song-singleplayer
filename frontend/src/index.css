@@ -23,9 +23,10 @@ code {
   background-image: url('/public/images/b1.png');
 }
 
-.bg-icon1 {
-  background-image: url('/public/images/icon1.png');
+.bg-song {
+  background-image: url('/public/images/bg-song.png');
 }
+
 
 @font-face {
   font-family: 'Metal Mania';

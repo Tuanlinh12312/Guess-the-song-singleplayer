@@ -44,10 +44,12 @@ const GameSetup = () => {
       <h1 class="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] tracking-wide text-center w-full uppercase text-white">
         Guess the song
       </h1>
-      <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-40px)] h-[calc(66.67%+10px)]">
-        <div class="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1 mt-3">
+      <div class= "flex h-[calc(100%-210px)]">
+      <SongList songs={songs} onDeleteSong={handleDeleteSong} />
+      <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
+        <div class="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
           <div class="flex items-start w-full mb-6">
-            <div class="flex flex-col px-6 w-full overflow-y-auto">
+            <div class="flex flex-col px-6 w-full">
               <h2 class="text-center font-bold text-3xl font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mt-2 mb-2">
                 Number of Rounds
               </h2>
@@ -63,13 +65,15 @@ const GameSetup = () => {
             </div>
           </div>
         </div>
+        <h3 class="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">Now Playing</h3>
+      <h4 class="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">Your Favourite Playlist</h4>
         <img
         src="/images/icon.png"
         alt="Icon"
-        className="w-64 h-64 object-contain scale-150 -mt-[50px] "
+        className="object-contain scale-50 -mt-[50px]"
       />
       </div>
-      <SongList songs={songs} onDeleteSong={handleDeleteSong} />
+      </div>
       <StartGameButton rounds={rounds} songs={songs} />
     </div>
     // </body>
