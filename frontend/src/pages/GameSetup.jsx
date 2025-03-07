@@ -44,7 +44,7 @@ const GameSetup = () => {
       <h1 class="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] tracking-wide text-center w-full uppercase text-white">
         Guess the song
       </h1>
-      <div class= "flex h-[calc(100%-210px)]">
+      <div class= "flex h-[calc(100%-230px)]">
       <SongList songs={songs} onDeleteSong={handleDeleteSong} />
       <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
         <div class="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
@@ -70,7 +70,7 @@ const GameSetup = () => {
         <img
         src="/images/icon.png"
         alt="Icon"
-        className="object-contain scale-50 -mt-[50px]"
+        className="object-contain scale-50 -mt-[40px]"
       />
       </div>
       </div>

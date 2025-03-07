@@ -18,7 +18,7 @@ const GuessTimeLimit = ({ onSetTime }) => {
             style={{
               padding: "10px 20px",
               border: "1px solid #ccc",
-              backgroundColor: selectedTime === time ? "lightblue" : "white",
+              backgroundColor: selectedTime === time ? "#e5d2c1" : "white",
               cursor: "pointer",
               borderRadius: "5px",
             }}
