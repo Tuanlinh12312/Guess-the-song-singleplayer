@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const StartGameButton = ({ rounds, songs, time }) => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleStartGame = async () => {
     if (rounds <= 0 || rounds > songs.length) {
@@ -20,7 +22,8 @@ const StartGameButton = ({ rounds, songs, time }) => {
     setLoading(true);
 
     try {
-        const response = await axios.post("http://localhost:8080/UpdateSong", songs);
+      console.log(songs);
+        const response = await axios.post("http://localhost:8080/UploadSong", songs);
         console.log(response.data.message);
     } catch (err) {
         console.log(
@@ -28,7 +31,7 @@ const StartGameButton = ({ rounds, songs, time }) => {
         );
     }
     try {
-        const response = await axios.post("http://localhost:8080/UpdateTime", time);
+        const response = await axios.patch("http://localhost:8080/UpdateTime", {time: time});
         console.log(response.data.message);
     } catch (err) {
         console.log(
@@ -36,13 +39,13 @@ const StartGameButton = ({ rounds, songs, time }) => {
         );
     }
     try {
-      const response = await axios.post("http://localhost:8080/UpdateRound", rounds);
+      const response = await axios.post("http://localhost:8080/UpdateRound", {round: rounds});
       console.log(response.data.message);
-  } catch (err) {
-      console.log(
-          `Error: ${err.response?.data?.error || "Something went wrong"}`
-      );
-  }
+    } catch (err) {
+        console.log(
+            `Error: ${err.response?.data?.error || "Something went wrong"}`
+        );
+    }
     try {
         const response = await axios.put("http://localhost:8080/StartGame");
         console.log(response.data.message);
@@ -51,6 +54,7 @@ const StartGameButton = ({ rounds, songs, time }) => {
             `Error: ${err.response?.data?.error || "Something went wrong"}`
         );
     }
+    navigate("/game");
   };
 
   return (

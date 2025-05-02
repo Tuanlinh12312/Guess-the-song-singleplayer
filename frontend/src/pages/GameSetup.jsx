@@ -1,10 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import RoundInput from "../components/RoundInput";
-import SongInput from "../components/SongInput";
-import SongList from "../components/SongList";
-import StartGameButton from "../components/StartGameButton";
-import GuessTime from "../components/GuessTime";
+import RoundInput from "../components/GameSetup/RoundInput";
+import SongInput from "../components/GameSetup/SongInput";
+import SongList from "../components/GameSetup/SongList";
+import StartGameButton from "../components/GameSetup/StartGameButton";
+import GuessTime from "../components/GameSetup/GuessTime";
 
 const GameSetup = () => {
   const [rounds, setRounds] = useState(0);
@@ -25,6 +25,7 @@ const GameSetup = () => {
       const response = await axios.post("http://localhost:8080/GetNameArtist", {
         url: songUrl,
       });
+      console.log(response.data.song);
       setSongs([...songs, response.data.song]);
     } catch (err) {
       console.log(

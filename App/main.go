@@ -16,8 +16,7 @@ func main() {
 	router.PATCH("/UpdateTime", controller.UpdateTime)
 	router.POST("/GetNameArtist", controller.GetNameArtist)
 	router.PUT("/StartGame", controller.StartGame)
-	router.POST("/GuessName", controller.ValidateName)
-	router.POST("/GuessArtist", controller.ValidateArtist)
-	router.PATCH("/NextSong", controller.NextSong)
+	router.POST("/Guess", controller.ValidateGuess)
+	router.GET("/Status", controller.GetStatus)
 	router.Run("localhost:8080")
 }
