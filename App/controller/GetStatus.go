@@ -12,5 +12,6 @@ func GetStatus(c *gin.Context) {
 		"gameover": database.CrrSong == database.Round,
 		"song":   database.SongList[database.CrrSong],
 		"round": database.CrrSong+1,
+		"time": database.Time,
 	})
 }
