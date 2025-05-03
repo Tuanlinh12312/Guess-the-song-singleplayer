@@ -32,26 +32,29 @@ const MainGame = () => {
 
   const handleGuess = async () => {
     try {
-      console.log("guess: ", guess);
       const response = await axios.post("http://localhost:8080/Guess", {
         guess: guess,
       });
-  
-      setFeedback(response.data.message);
+
+      const isCorrect = response.data.correct;
+      const message = response.data.message;
+
+      setFeedback(message); // optional – keep or remove based on your UI
       setGuess("");
-  
-      if (response.data.correct) {
-        setGuessHistory(prev => [
-          ...prev,
-          { guess, feedback: response.data.message }
-        ]);
-      }
-  
+
+      // Push to history with feedback only if correct
+      setGuessHistory((prev) => [
+        ...prev,
+        {
+          guess,
+          feedback: isCorrect ? message : null,
+        },
+      ]);
+
       if (response.data.next === true) {
         setIsPlaying(false);
         await fetchGameStatus();
       }
-  
     } catch (error) {
       console.error("Error validating guess:", error);
     }
