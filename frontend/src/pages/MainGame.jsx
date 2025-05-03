@@ -5,6 +5,7 @@ import RoundTimer from "../components/MainGame/RoundTimer";
 import GuessBar from "../components/MainGame/GuessBar";
 
 const MainGame = () => {
+  const [score, setScore] = useState(0);
   const [round, setRound] = useState(0);
   const [song, setSong] = useState(null);
   const [gameOver, setGameOver] = useState(false);
@@ -36,9 +37,10 @@ const MainGame = () => {
         guess: guess,
       });
 
-      const isCorrect = response.data.correct;
+      const isCorrect = response.data.point > 0;
       const message = response.data.message;
 
+      setScore(score + response.data.point);
       setFeedback(message); // optional – keep or remove based on your UI
       setGuess("");
 
@@ -76,6 +78,7 @@ const MainGame = () => {
       ) : (
         <>
           <h2 className="text-2xl">Round {round}</h2>
+          <h2 className="text-2xl">Score: {score}</h2>
           {song && (
             <RoundTimer key={round} timeCap={timeCap} isPlaying={isPlaying} />
           )}

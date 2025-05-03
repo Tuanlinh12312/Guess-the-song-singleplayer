@@ -8,10 +8,16 @@ import (
 )
 
 func GetStatus(c *gin.Context) {
+	gameOver := database.CrrSong == database.Round
+	song := database.Song{}
+	if !gameOver {
+		song = database.SongList[database.CrrSong]
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"gameover": database.CrrSong == database.Round,
-		"song":   database.SongList[database.CrrSong],
-		"round": database.CrrSong+1,
-		"time": database.Time,
+		"gameover": gameOver,
+		"song":     song,
+		"round":    database.CrrSong + 1,
+		"time":     database.Time,
 	})
 }
