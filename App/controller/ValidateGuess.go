@@ -35,11 +35,13 @@ func ValidateGuess(c *gin.Context) {
 	song := &database.SongList[database.CrrSong]
 	message := "Incorrect guess. Try again!"
 	nextRound := false
+	correct := false
 	
 	if match(s, song.Title) {
 		if song.CntTitle == 0 {
 			song.CntTitle = 1
-			message = "You correctly guessed the song title!"
+			message = "Correct song title!"
+			correct = true
 		} else {
 			message = "You've already guessed the song title correctly."
 		}
@@ -51,6 +53,7 @@ func ValidateGuess(c *gin.Context) {
 				database.CrrGuessedArtists[i] = true 
 				song.CntArtists++
 				message = "Correct Artist"
+				correct = true
 			} else {
 				message = "You've already guessed this artist correctly."
 			}
@@ -69,5 +72,6 @@ func ValidateGuess(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": message,
 		"next": nextRound,
+		"correct": correct,
 	})
 }

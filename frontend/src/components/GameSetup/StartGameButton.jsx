@@ -17,6 +17,7 @@ const StartGameButton = ({ rounds, songs, time }) => {
     }
     if (time === 0) {
       alert("Please choose a time limit")
+      return;
     }
 
     setLoading(true);

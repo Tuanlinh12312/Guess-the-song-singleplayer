@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import SongPlayer from "../components/MainGame/SongPlayer";
+import RoundTimer from "../components/MainGame/RoundTimer";
+import GuessBar from "../components/MainGame/GuessBar";
 
 const MainGame = () => {
-  const [started, setStarted] = useState(false);
   const [round, setRound] = useState(0);
   const [song, setSong] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [timeCap, setTimeCap] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [guessHistory, setGuessHistory] = useState([]);
 
   const fetchGameStatus = async () => {
     try {
@@ -19,6 +23,7 @@ const MainGame = () => {
       } else {
         setSong(response.data.song);
         setRound(response.data.round);
+        setTimeCap(response.data.time);
       }
     } catch (error) {
       console.error("Error fetching game status:", error);
@@ -35,8 +40,15 @@ const MainGame = () => {
       setFeedback(response.data.message);
       setGuess("");
   
-      // If the round is complete and a new one should start, fetch new status
+      if (response.data.correct) {
+        setGuessHistory(prev => [
+          ...prev,
+          { guess, feedback: response.data.message }
+        ]);
+      }
+  
       if (response.data.next === true) {
+        setIsPlaying(false);
         await fetchGameStatus();
       }
   
@@ -45,51 +57,37 @@ const MainGame = () => {
     }
   };
 
+  // Start game on button click
   useEffect(() => {
-    if (started) {
-      fetchGameStatus();
-    }
-  }, [started]);  
+    fetchGameStatus();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
       <h1 className="text-4xl font-bold mb-4">Guess the Song</h1>
-  
-      {!started ? (
-        <button
-          className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white text-xl"
-          onClick={() => setStarted(true)}
-        >
-          ▶️ Start Game
-        </button>
-      ) : gameOver ? (
-        <h2 className="text-2xl text-red-400">🎉 Game Over! Thanks for playing.</h2>
+
+      {gameOver ? (
+        <h2 className="text-2xl text-red-400">
+          🎉 Game Over! Thanks for playing.
+        </h2>
       ) : (
         <>
           <h2 className="text-2xl">Round {round}</h2>
-  
-          {song && <SongPlayer song={song} />}
-  
-          <input
-            type="text"
-            className="p-2 rounded-md text-black w-1/2"
-            placeholder="Enter your guess..."
-            value={guess}
-            onChange={(e) => setGuess(e.target.value)}
+          {song && (
+            <RoundTimer key={round} timeCap={timeCap} isPlaying={isPlaying} />
+          )}
+          {song && <SongPlayer song={song} onPlay={() => setIsPlaying(true)} />}
+          <GuessBar
+            guess={guess}
+            feedback={feedback}
+            setGuess={setGuess}
+            onSubmit={handleGuess}
+            guessHistory={guessHistory}
           />
-          <button
-            className="mt-2 p-2 bg-blue-500 hover:bg-blue-700 rounded-md"
-            onClick={handleGuess}
-          >
-            Submit Guess
-          </button>
-  
-          {feedback && <p className="mt-2 text-lg">{feedback}</p>}
         </>
       )}
     </div>
   );
-  
 };
 
 export default MainGame;

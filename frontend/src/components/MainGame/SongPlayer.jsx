@@ -1,7 +1,7 @@
 import YouTube from "react-youtube";
 import { useEffect, useRef } from "react";
 
-const SongPlayer = ({ song }) => {
+const SongPlayer = ({ song, onPlay }) => {
   const playerRef = useRef(null);
 
   const extractVideoID = (url) => {
@@ -16,7 +16,7 @@ const SongPlayer = ({ song }) => {
   const videoId = extractVideoID(song.url);
 
   const opts = {
-    height: "200", // can be visually hidden with CSS later
+    height: "200",
     width: "300",
     playerVars: {
       autoplay: 1,
@@ -31,7 +31,7 @@ const SongPlayer = ({ song }) => {
       const player = playerRef.current;
       if (player && typeof player.getCurrentTime === "function") {
         const time = player.getCurrentTime();
-        if (time >= song.End) {
+        if (time >= song.end) {
           player.pauseVideo();
         }
       }
@@ -39,20 +39,22 @@ const SongPlayer = ({ song }) => {
     return () => clearInterval(interval);
   }, [song]);
 
+  const handleStateChange = (event) => {
+    if (event.data === 1 && typeof onPlay === "function") {
+      onPlay(); // Notify MainGame when playback actually starts
+    }
+  };
+
   return (
-    <div className="invisible"> {/* hide the player visually */}
-    <h1>
-      {opts.playerVars.start}
-      {videoId}
-    </h1>
+    <div className="invisible">
       <YouTube
         videoId={videoId}
         opts={opts}
         onReady={(event) => {
           playerRef.current = event.target;
           event.target.setVolume(100);
-          // event.target.mute(); // Mute to allow autoplay
         }}
+        onStateChange={handleStateChange}
       />
     </div>
   );
