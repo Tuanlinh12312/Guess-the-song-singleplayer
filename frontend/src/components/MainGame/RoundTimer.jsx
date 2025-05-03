@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const RoundTimer = ({ timeCap, isPlaying }) => {
+const RoundTimer = ({ timeCap, isPlaying, onTimeOut }) => {
   const [timeLeft, setTimeLeft] = useState(timeCap);
 
   useEffect(() => {
@@ -11,6 +11,7 @@ const RoundTimer = ({ timeCap, isPlaying }) => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
+          onTimeOut(); // ⏱️ Inform MainGame
           return 0;
         }
         return prev - 1;
@@ -20,9 +21,8 @@ const RoundTimer = ({ timeCap, isPlaying }) => {
     return () => clearInterval(interval);
   }, [timeCap, isPlaying]);
 
-  return (
-    <div className="text-lg mb-2">⏱️ Time Left: {timeLeft} seconds</div>
-  );
+  return <div className="text-lg mb-2">⏱️ Time Left: {timeLeft} seconds</div>;
 };
 
 export default RoundTimer;
+

@@ -16,8 +16,8 @@ const SongPlayer = ({ song, onPlay }) => {
   const videoId = extractVideoID(song.url);
 
   const opts = {
-    height: "200",
-    width: "300",
+    height: "0",
+    width: "0",
     playerVars: {
       autoplay: 1,
       controls: 0,

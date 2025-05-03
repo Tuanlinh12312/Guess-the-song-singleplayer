@@ -18,5 +18,6 @@ func main() {
 	router.PUT("/StartGame", controller.StartGame)
 	router.POST("/Guess", controller.ValidateGuess)
 	router.GET("/Status", controller.GetStatus)
+	router.POST("/NextRound", controller.NextRound)
 	router.Run("localhost:8080")
 }
