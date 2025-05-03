@@ -31,6 +31,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        comic: ['ComicRelief', 'cursive'],
         Roboto: ['Roboto', 'cursive'],
         EBGaramond: ['EB Garamond', 'cursive'],
         darumadrop: ['Darumadrop One', 'cursive'],

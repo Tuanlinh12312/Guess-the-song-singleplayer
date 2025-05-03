@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import SongPlayer from "../components/MainGame/SongPlayer";
+import RoundCount from "../components/MainGame/RoundCount";
 
 const MainGame = () => {
   const [started, setStarted] = useState(false);
@@ -52,8 +53,8 @@ const MainGame = () => {
   }, [started]);  
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-      <h1 className="text-4xl font-bold mb-4">Guess the Song</h1>
+    <div className="flex flex-col min-h-screen bg-image h-screen bg-cover bg-center bg-fixed text-white">
+      <h1 className="text-4xl font-darumadrop font-bold drop-shadow-[4px_4px_0px_black] ml-5">Guess the Song</h1>
   
       {!started ? (
         <button
@@ -66,7 +67,7 @@ const MainGame = () => {
         <h2 className="text-2xl text-red-400">🎉 Game Over! Thanks for playing.</h2>
       ) : (
         <>
-          <h2 className="text-2xl">Round {round}</h2>
+          <RoundCount round={round} />
   
           {song && <SongPlayer song={song} />}
   
