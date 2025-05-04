@@ -108,16 +108,13 @@ const MainGame = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
       <h1 className="text-4xl font-bold mb-4">Guess the Song</h1>
-
+      {song && <SongPlayer song={song} onPlay={() => setIsPlaying(true)} />}
       {gameOver ? (
         <EndGame score={score} />
       ) : roundEnded ? (
         <EndRound song={song} onNextRound={goToNextRound} />
       ) : !isPlaying ? (
-        <>
-          {song && <SongPlayer song={song} onPlay={() => setIsPlaying(true)} />}
-          <Loading></Loading>
-        </>
+        <Loading></Loading>
       ) : (
         <>
           <GuessChecklist
@@ -129,7 +126,7 @@ const MainGame = () => {
             key={round}
             timeCap={timeCap}
             isPlaying={isPlaying}
-            onTimeOut={() => setRoundEnded(true)}
+            onTimeOut={() => setRoundEnded(false)}
           />
           <GuessBar
             guess={guess}
@@ -138,7 +135,6 @@ const MainGame = () => {
             onSubmit={handleGuess}
             guessHistory={guessHistory}
           />
-          <SongPlayer song={song} onPlay={() => setIsPlaying(true)} />
         </>
       )}
     </div>

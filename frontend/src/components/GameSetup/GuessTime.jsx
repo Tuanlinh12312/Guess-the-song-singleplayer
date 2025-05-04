@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const GuessTimeLimit = ({ onSetTime }) => {
-  const [selectedTime, setSelectedTime] = useState(30); // Default to 30 sec
+  const [selectedTime, setSelectedTime] = useState(0); // Default to 30 sec
 
   const handleSelectTime = (time) => {
     setSelectedTime(time);
