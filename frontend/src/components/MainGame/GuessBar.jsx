@@ -1,21 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const GuessBar = ({ guess, feedback, setGuess, onSubmit, guessHistory }) => {
-  const chatContainerRef = useRef(null); // Reference to the chat container
-  const [isAtBottom, setIsAtBottom] = useState(true); // To track if user is at the bottom
+  const chatContainerRef = useRef(null);
 
-  // Handle scroll detection
-  const handleScroll = () => {
-    const container = chatContainerRef.current;
-    setIsAtBottom(container.scrollHeight - container.scrollTop === container.clientHeight);
-  };
-
-  // Scroll to the bottom whenever guessHistory changes and the user is at the bottom
+  // Always scroll to the bottom on guessHistory update
   useEffect(() => {
-    if (isAtBottom && chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    const container = chatContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
     }
-  }, [guessHistory, isAtBottom]);
+  }, [guessHistory]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,15 +21,13 @@ const GuessBar = ({ guess, feedback, setGuess, onSubmit, guessHistory }) => {
       onSubmit={handleSubmit}
       className="h-full w-full bg-chat bg-no-repeat bg-center"
     >
-
-      {/* Chat-style history */}
+      {/* Chat history */}
       <div
-        ref={chatContainerRef} // Attach ref here
+        ref={chatContainerRef}
         className="p-3 rounded-md overflow-auto h-[calc(100%-70px)]"
-        onScroll={handleScroll} // Detect scroll position
         style={{
-          scrollbarWidth: "none", // For Firefox
-          msOverflowStyle: "none", // For IE and Edge
+          scrollbarWidth: "none", // Firefox
+          msOverflowStyle: "none", // IE and Edge
         }}
       >
         {guessHistory.map((entry, idx) => (
@@ -56,6 +48,7 @@ const GuessBar = ({ guess, feedback, setGuess, onSubmit, guessHistory }) => {
         ))}
       </div>
 
+      {/* Input area */}
       <div className="flex flex-row">
         <input
           type="text"
