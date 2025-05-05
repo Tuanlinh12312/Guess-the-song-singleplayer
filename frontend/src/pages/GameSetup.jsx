@@ -24,29 +24,34 @@ const GameSetup = () => {
       // Add a single song
       console.log("Fetching single song:", url);
       try {
-        const response = await axios.post(
-          "http://localhost:8080/GetNameArtist",
-          {
-            url,
-          }
-        );
+        const response = await axios.post("http://localhost:8080/GetNameArtist", { url });
         console.log("Fetched song:", response.data.song);
         setSongs((prev) => [...prev, response.data.song]);
       } catch (err) {
         console.error("Error fetching single song:", err);
       }
+    } else if (cnt === -2) {
+      // Add a playlist
+      console.log("Fetching playlist from:", url);
+      try {
+        const response = await axios.post("http://localhost:8080/GetPlaylist", { url });
+        const list = response.data.playlist;
+        if (Array.isArray(list)) {
+          console.log("Fetched playlist:", list);
+          setSongs((prev) => [...prev, ...list]);
+        }
+      } catch (err) {
+        console.error("Error fetching playlist:", err);
+      }
     } else {
       // Add a list of suggested songs
       console.log(`Fetching ${cnt} suggested songs from:`, url);
       try {
-        const response = await axios.post(
-          "http://localhost:8080/GetWatchlist",
-          {
-            url,
-            cnt,
-          }
-        );
-
+        const response = await axios.post("http://localhost:8080/GetWatchlist", {
+          url,
+          cnt,
+        });
+  
         const list = response.data.watchlist;
         if (Array.isArray(list)) {
           console.log("Fetched watchlist:", list);
@@ -56,7 +61,7 @@ const GameSetup = () => {
         console.error("Error fetching suggested songs:", err);
       }
     }
-  };
+  };  
 
   const handleDeleteSong = (index) => {
     setSongs(songs.filter((_, i) => i !== index));

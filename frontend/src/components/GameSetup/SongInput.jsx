@@ -2,14 +2,14 @@ import { useState } from "react";
 
 const SongInput = ({ onAddSong }) => {
   const [url, setUrl] = useState("");
-  const [mode, setMode] = useState("single"); // 'single' or 'suggested'
+  const [mode, setMode] = useState("single"); // 'single', 'suggested', or 'playlist'
   const [count, setCount] = useState(10);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (url.trim() === "") return;
 
-    const cnt = mode === "single" ? -1 : count;
+    const cnt = mode === "single" ? -1 : (mode === "playlist" ? -2 : count);
     onAddSong(url, cnt);
     setUrl("");
   };
@@ -35,6 +35,7 @@ const SongInput = ({ onAddSong }) => {
       >
         <option value="single">Add Single</option>
         <option value="suggested">Add Suggestions</option>
+        <option value="playlist">Add Playlist</option>
       </select>
 
       {mode === "suggested" && (

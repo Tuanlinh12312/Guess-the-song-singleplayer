@@ -16,6 +16,7 @@ func main() {
 	router.PATCH("/UpdateTime", controller.UpdateTime)
 	router.POST("/GetNameArtist", controller.GetNameArtist)
 	router.POST("/GetWatchlist", controller.GetWatchlist)
+	router.POST("/GetPlaylist", controller.GetPlaylist)
 	router.PUT("/StartGame", controller.StartGame)
 	router.POST("/Guess", controller.ValidateGuess)
 	router.GET("/Status", controller.GetStatus)

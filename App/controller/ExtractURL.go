@@ -7,6 +7,7 @@ import (
 	"regexp"
 
 	"github.com/raitonoberu/ytmusic"
+	"github.com/garnermccloud/youtube"
 )
 
 func extractVideoID(url string) (string, error) {
@@ -88,4 +89,28 @@ func ExtractWatchlist(url string, cnt int) ([]database.Song, error) {
 		watchlist = append(watchlist, extractSongInfo(result[i]))
 	}
 	return watchlist, nil
+}
+
+func ExtractPlaylist(playlistURL string) ([]database.Song, error) {
+	client := youtube.Client{}
+
+	pl, err := client.GetPlaylist(playlistURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var songs []database.Song
+	for _, entry := range pl.Videos {
+		var song database.Song
+		song.Title = entry.Title
+		song.Artists = []string{entry.Author}
+		song.Thumbnail = entry.Thumbnails[0].URL
+		song.Start = 0
+		song.End = int(entry.Duration.Seconds())
+		song.URL = "https://www.youtube.com/watch?v=" + entry.ID
+
+		songs = append(songs, song)
+	}
+
+	return songs, nil
 }
