@@ -10,6 +10,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -23,31 +31,50 @@ code {
   background-image: url('/public/images/b1.png');
 }
 
+.bg-chat {
+  background-image: url('/public/images/bg-chat.png');
+  background-size: 600px;
+}
+
+.bg-score {
+  background-image: url('/public/images/score.png');
+}
+
+.bg-type {
+  background-image: url('/public/images/bg-type.png');
+}
 
 @font-face {
   font-family: 'Metal Mania';
-  src: url('/public/fonts/MetalMania-Regular.ttf') format('ttf');
+  src: url('/public/fonts/MetalMania-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Darumadrop One';
-  src: url('/public/fonts/DarumadropOne-Regular.ttf') format('ttf');
+  src: url('/public/fonts/DarumadropOne-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'EB Garamond';
-  src: url('/public/fonts/EBGaramond-VariableFont_wght.ttf') format('ttf');
+  src: url('/public/fonts/EBGaramond-VariableFont_wght.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('/public/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf') format('ttf');
+  src: url('/public/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Coiny';
+  src: url('/public/fonts/Coiny.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

@@ -25,13 +25,13 @@ const SongInput = ({ onAddSong }) => {
         placeholder="Enter YouTube Music URL"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
-        className="border border-gray-300 rounded px-3 py-1 flex-1"
+        className="border border-gray-300 rounded px-3 py-1 flex-1 w-3/4 font-EBGaramond"
       />
 
       <select
         value={mode}
         onChange={(e) => setMode(e.target.value)}
-        className="border border-gray-300 rounded px-2 py-1"
+        className="border border-gray-300 rounded px-2 py-1 w-1/4 font-EBGaramond"
       >
         <option value="single">Add Single</option>
         <option value="suggested">Add Suggestions</option>
@@ -45,7 +45,7 @@ const SongInput = ({ onAddSong }) => {
           min="1"
           value={count}
           onChange={(e) => setCount(parseInt(e.target.value))}
-          className="border border-gray-300 rounded px-2 py-1 w-20"
+          className="border border-gray-300 rounded px-2 py-1 w-14 font-EBGaramond text-center"
           placeholder="Count"
         />
       )}

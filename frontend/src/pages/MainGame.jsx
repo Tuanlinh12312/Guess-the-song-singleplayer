@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import SongPlayer from "../components/MainGame/SongPlayer";
+import RoundCount from "../components/MainGame/RoundCount";
 import RoundTimer from "../components/MainGame/RoundTimer";
 import GuessBar from "../components/MainGame/GuessBar";
 import GuessChecklist from "../components/MainGame/Checklist";
 import EndRound from "../components/MainGame/EndRound";
 import EndGame from "../components/MainGame/EndGame";
 import Loading from "../components/MainGame/Loading";
+import Score from "../components/MainGame/Score";
 
 const MainGame = () => {
   const [score, setScore] = useState(0);
@@ -50,10 +52,9 @@ const MainGame = () => {
       const message = response.data.message;
 
       setScore((score) => score + response.data.point);
-      setFeedback(message); // optional – keep or remove based on your UI
+      setFeedback(message);
       setGuess("");
 
-      // Push to history with feedback only if correct
       setGuessHistory((prev) => [
         ...prev,
         {
@@ -77,24 +78,21 @@ const MainGame = () => {
     try {
       await axios.post("http://localhost:8080/NextRound");
 
-      // Reset game state
       setTitle(0);
       setArtists(0);
       setRoundEnded(false);
       setIsPlaying(false);
 
-      await fetchGameStatus(); // Get new song + timeCap + round number
+      await fetchGameStatus();
     } catch (err) {
       console.error("Error advancing to next round:", err);
     }
   };
 
-  // start game
   useEffect(() => {
     fetchGameStatus();
   }, []);
 
-  // detects when round ends
   useEffect(() => {
     if (
       (titleGuessed && artistsGuessed === song?.artists.length) ||
@@ -106,8 +104,10 @@ const MainGame = () => {
   }, [titleGuessed, artistsGuessed, song, timeCap]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-      <h1 className="text-4xl font-bold mb-4">Guess the Song</h1>
+    <div className="flex flex-col min-h-screen bg-image h-screen bg-cover bg-center bg-fixed overflow-x-hiddenx">
+      <h1 className="text-5xl font-darumadrop font-bold drop-shadow-[4px_4px_0px_black] tracking-wide w-full uppercase text-white ml-10 mt-3">
+        Guess the Song
+      </h1>
       {song && (
         <SongPlayer
           song={song}
@@ -123,24 +123,45 @@ const MainGame = () => {
         <Loading></Loading>
       ) : (
         <>
-          <GuessChecklist
-            guessedTitle={titleGuessed}
-            guessedArtists={artistsGuessed}
-            totalArtists={song.artists.length}
-          />
-          <RoundTimer
-            key={round}
-            timeCap={timeCap}
-            isPlaying={isPlaying}
-            onTimeOut={() => setRoundEnded(true)}
-          />
-          <GuessBar
-            guess={guess}
-            feedback={feedback}
-            setGuess={setGuess}
-            onSubmit={handleGuess}
-            guessHistory={guessHistory}
-          />
+          <RoundCount round={round} />
+          {song && (
+            <div className="absolute p-2 top-[60px] right-7">
+              <RoundTimer
+                key={round}
+                timeCap={timeCap}
+                isPlaying={isPlaying}
+                onTimeOut={() => setRoundEnded(true)}
+              />
+            </div>
+          )}
+
+          <div className="flex flex-row h-[calc(100%-180px)]">
+            <div className="flex flex-col ml-10 mt-3 w-1/6 mr-3">
+              <Score score={score} />
+              <GuessChecklist
+                guessedTitle={titleGuessed}
+                guessedArtists={artistsGuessed}
+                totalArtists={song.artists.length}
+              />
+              <div className="flex flex-1 items-end justify-center mt-4">
+                <img
+                  src="/images/maingame.gif"
+                  alt="deer"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col w-5/6 ml-3 mr-10 bg-amber-900/10 mt-3 rounded-lg">
+              <GuessBar
+                guess={guess}
+                feedback={feedback}
+                setGuess={setGuess}
+                onSubmit={handleGuess}
+                guessHistory={guessHistory}
+              />
+            </div>
+          </div>
         </>
       )}
     </div>

@@ -5,6 +5,7 @@ import SongInput from "../components/GameSetup/SongInput";
 import SongList from "../components/GameSetup/SongList";
 import StartGameButton from "../components/GameSetup/StartGameButton";
 import GuessTime from "../components/GameSetup/GuessTime";
+import Score from "../components/MainGame/Score";
 
 const GameSetup = () => {
   const [rounds, setRounds] = useState(0);
