@@ -103,68 +103,88 @@ const MainGame = () => {
     }
   }, [titleGuessed, artistsGuessed, song, timeCap]);
 
+  useEffect(() => {
+    document.body.style.overflow = roundEnded ? "hidden" : "auto";
+  }, [roundEnded]);
+
+  // ✅ Show loading only when waiting for song at startup
+  if (!song && !gameOver) {
+    return <Loading />;
+  }
+
   return (
-    <div className="flex flex-col min-h-screen bg-image h-screen bg-cover bg-center bg-fixed overflow-x-hiddenx">
-      <h1 className="text-5xl font-darumadrop font-bold drop-shadow-[4px_4px_0px_black] tracking-wide w-full uppercase text-white ml-10 mt-3">
-        Guess the Song
-      </h1>
+    <div className="relative flex flex-col min-h-screen max-h-screen bg-image bg-cover bg-center bg-fixed overflow-hidden">
+  <h1 className="text-5xl font-darumadrop font-bold drop-shadow-[4px_4px_0px_black] tracking-wide w-full uppercase text-white ml-10 mt-3">
+    Guess the Song
+  </h1>
+
+  {/* Song Player */}
+  {song && (
+    <SongPlayer
+      song={song}
+      onPlay={() => setIsPlaying(true)}
+      roundEnded={roundEnded}
+    />
+  )}
+
+  {!gameOver && (
+    <>
+      {/* Timer stays outside the blur */}
       {song && (
-        <SongPlayer
-          song={song}
-          onPlay={() => setIsPlaying(true)}
-          roundEnded={roundEnded}
-        />
+        <div className="absolute p-2 top-[60px] right-7 z-10">
+          <RoundTimer
+            key={round}
+            timeCap={timeCap}
+            isPlaying={isPlaying}
+            onTimeOut={() => setRoundEnded(true)}
+          />
+        </div>
       )}
-      {gameOver ? (
-        <EndGame score={score} />
-      ) : roundEnded ? (
-        <EndRound song={song} onNextRound={goToNextRound} />
-      ) : !isPlaying ? (
-        <Loading></Loading>
-      ) : (
-        <>
-          <RoundCount round={round} />
-          {song && (
-            <div className="absolute p-2 top-[60px] right-7">
-              <RoundTimer
-                key={round}
-                timeCap={timeCap}
-                isPlaying={isPlaying}
-                onTimeOut={() => setRoundEnded(true)}
-              />
-            </div>
-          )}
 
-          <div className="flex flex-row h-[calc(100%-180px)]">
-            <div className="flex flex-col ml-10 mt-3 w-1/6 mr-3">
-              <Score score={score} />
-              <GuessChecklist
-                guessedTitle={titleGuessed}
-                guessedArtists={artistsGuessed}
-                totalArtists={song.artists.length}
-              />
-              <div className="flex flex-1 items-end justify-center mt-4">
-                <img
-                  src="/images/maingame.gif"
-                  alt="deer"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
+      {/* Blur only this inner content */}
+      <div className={`${roundEnded ? "blur-sm pointer-events-none" : ""}`}>
+        <RoundCount round={round} />
 
-            <div className="flex flex-col w-5/6 ml-3 mr-10 bg-amber-900/10 mt-3 rounded-lg">
-              <GuessBar
-                guess={guess}
-                feedback={feedback}
-                setGuess={setGuess}
-                onSubmit={handleGuess}
-                guessHistory={guessHistory}
+        <div className="flex flex-row" style={{ height: "calc(100vh - 180px)" }}>
+          <div className="flex flex-col ml-10 mt-3 w-1/6 mr-3">
+            <Score score={score} />
+            <GuessChecklist
+              guessedTitle={titleGuessed}
+              guessedArtists={artistsGuessed}
+              totalArtists={song?.artists.length || 0}
+            />
+            <div className="flex flex-1 items-end justify-center mt-4">
+              <img
+                src="/images/maingame.gif"
+                alt="deer"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
-        </>
-      )}
+
+          <div className="flex flex-col w-5/6 ml-3 mr-10 bg-amber-900/10 mt-3 rounded-lg">
+            <GuessBar
+              guess={guess}
+              feedback={feedback}
+              setGuess={setGuess}
+              onSubmit={handleGuess}
+              guessHistory={guessHistory}
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  )}
+
+  {gameOver && <EndGame score={score} />}
+
+  {roundEnded && !gameOver && (
+    <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
+      <EndRound song={song} onNextRound={goToNextRound} />
     </div>
+  )}
+</div>
+
   );
 };
 

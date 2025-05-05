@@ -27,6 +27,7 @@ code {
   background-image: url('/public/images/background.png');
 }
 
+
 .bg-b1 {
   background-image: url('/public/images/b1.png');
 }
@@ -42,6 +43,14 @@ code {
 
 .bg-type {
   background-image: url('/public/images/bg-type.png');
+}
+
+.bg-history {
+  background-image: url('/public/images/bg-history.png');
+}
+
+.bg-nextround {
+  background-image: url('/public/images/nextround.png');
 }
 
 @font-face {

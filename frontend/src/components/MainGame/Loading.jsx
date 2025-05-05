@@ -15,7 +15,7 @@ const Loading = () => {
             <img
               src="/images/loading.gif"
               alt="Loading"
-              className="w-full h-auto"
+              className="w-full h-auto animate-pulse"
             />
           </div>
         </div>
