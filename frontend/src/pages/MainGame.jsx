@@ -108,7 +108,13 @@ const MainGame = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
       <h1 className="text-4xl font-bold mb-4">Guess the Song</h1>
-      {song && <SongPlayer song={song} onPlay={() => setIsPlaying(true)} />}
+      {song && (
+        <SongPlayer
+          song={song}
+          onPlay={() => setIsPlaying(true)}
+          roundEnded={roundEnded}
+        />
+      )}
       {gameOver ? (
         <EndGame score={score} />
       ) : roundEnded ? (
@@ -126,7 +132,7 @@ const MainGame = () => {
             key={round}
             timeCap={timeCap}
             isPlaying={isPlaying}
-            onTimeOut={() => setRoundEnded(false)}
+            onTimeOut={() => setRoundEnded(true)}
           />
           <GuessBar
             guess={guess}

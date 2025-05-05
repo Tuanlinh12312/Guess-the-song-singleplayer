@@ -33,7 +33,7 @@ func fixTitle(title *string, artists *[]string) {
 	*title = brackets.ReplaceAllString(*title, "")
 }
 
-func extractSongInfo(t *ytmusic.TrackItem, url string) database.Song {
+func extractSongInfo(t *ytmusic.TrackItem) database.Song {
 	var song database.Song
 	song.Title = t.Title
 	song.Artists = make([]string, 0)
@@ -46,7 +46,7 @@ func extractSongInfo(t *ytmusic.TrackItem, url string) database.Song {
 	song.Thumbnail = t.Thumbnails[0].URL
 	song.Start = 0
 	song.End = t.Duration
-	song.URL = url
+	song.URL = "https://music.youtube.com/watch?v=" + t.VideoID
 	return song
 }
 
@@ -62,8 +62,30 @@ func ExtractURL(url string) (database.Song, error) {
 	}
 
 	if len(result) == 0 {
-		return database.Song{}, fmt.Errorf("Found no songs")
+		return database.Song{}, fmt.Errorf("found no songs")
 	}
 
-	return extractSongInfo(result[0], url), nil
+	return extractSongInfo(result[0]), nil
+}
+
+func ExtractWatchlist(url string, cnt int) ([]database.Song, error) {
+	videoID, err := extractVideoID(url)
+	if err != nil {
+		return []database.Song{}, err
+	}
+
+	result, err := ytmusic.GetWatchPlaylist(videoID)
+	if err != nil {
+		return []database.Song{}, err
+	}
+
+	if len(result) < cnt {
+		return []database.Song{}, fmt.Errorf("insufficient songs from Watchlist")
+	}
+
+	watchlist := make([]database.Song, 0)
+	for i := 0; i < cnt; i++ {
+		watchlist = append(watchlist, extractSongInfo(result[i]))
+	}
+	return watchlist, nil
 }

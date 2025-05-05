@@ -1,7 +1,7 @@
 import YouTube from "react-youtube";
 import { useEffect, useRef } from "react";
 
-const SongPlayer = ({ song, onPlay }) => {
+const SongPlayer = ({ song, onPlay, roundEnded }) => {
   const playerRef = useRef(null);
 
   const extractVideoID = (url) => {
@@ -27,6 +27,13 @@ const SongPlayer = ({ song, onPlay }) => {
   };
 
   useEffect(() => {
+    // Pause when round ends
+    if (roundEnded && playerRef.current) {
+      playerRef.current.pauseVideo();
+    }
+  }, [roundEnded]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       const player = playerRef.current;
       if (player && typeof player.getCurrentTime === "function") {
@@ -41,7 +48,7 @@ const SongPlayer = ({ song, onPlay }) => {
 
   const handleStateChange = (event) => {
     if (event.data === 1 && typeof onPlay === "function") {
-      onPlay(); // Notify MainGame when playback actually starts
+      onPlay(); // Start game when video plays
     }
   };
 

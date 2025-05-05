@@ -19,19 +19,42 @@ const GameSetup = () => {
     setTime(time);
   };
 
-  const handleAddSong = async (songUrl) => {
-    console.log("requesting:", { url: songUrl });
-    try {
-      const response = await axios.post("http://localhost:8080/GetNameArtist", {
-        url: songUrl,
-      });
-      console.log(response.data.song);
-      setSongs([...songs, response.data.song]);
-    } catch (err) {
-      console.log(
-        `Error: ${err.response?.data?.error || "Unable to fetch songURL"}`
-      );
-      console.log(songUrl);
+  const handleAddSong = async (url, cnt) => {
+    if (cnt === -1) {
+      // Add a single song
+      console.log("Fetching single song:", url);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/GetNameArtist",
+          {
+            url,
+          }
+        );
+        console.log("Fetched song:", response.data.song);
+        setSongs((prev) => [...prev, response.data.song]);
+      } catch (err) {
+        console.error("Error fetching single song:", err);
+      }
+    } else {
+      // Add a list of suggested songs
+      console.log(`Fetching ${cnt} suggested songs from:`, url);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/GetWatchlist",
+          {
+            url,
+            cnt,
+          }
+        );
+
+        const list = response.data.watchlist;
+        if (Array.isArray(list)) {
+          console.log("Fetched watchlist:", list);
+          setSongs((prev) => [...prev, ...list]);
+        }
+      } catch (err) {
+        console.error("Error fetching suggested songs:", err);
+      }
     }
   };
 
@@ -45,37 +68,41 @@ const GameSetup = () => {
       <h1 class="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] tracking-wide text-center w-full uppercase text-white">
         Guess the song
       </h1>
-      <div class= "flex h-[calc(100%-230px)]">
-      <SongList songs={songs} onDeleteSong={handleDeleteSong} />
-      <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
-        <div class="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
-          <div class="flex items-start w-full mb-6">
-            <div class="flex flex-col px-6 w-full">
-              <h2 class="text-center font-bold text-3xl font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mt-2 mb-2">
-                Number of Rounds
-              </h2>
-              <RoundInput onSetRounds={handleSetRounds} />
-              <h3 class="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
-                Your Song
-              </h3>
-              <SongInput onAddSong={handleAddSong} />
-              <h3 class="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
-                Guess Time
-              </h3>
-              <GuessTime onSetTime={setTime}></GuessTime>
+      <div class="flex h-[calc(100%-230px)]">
+        <SongList songs={songs} onDeleteSong={handleDeleteSong} />
+        <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
+          <div class="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
+            <div class="flex items-start w-full mb-6">
+              <div class="flex flex-col px-6 w-full">
+                <h2 class="text-center font-bold text-3xl font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mt-2 mb-2">
+                  Number of Rounds
+                </h2>
+                <RoundInput onSetRounds={handleSetRounds} />
+                <h3 class="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
+                  Your Song
+                </h3>
+                <SongInput onAddSong={handleAddSong} />
+                <h3 class="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
+                  Guess Time
+                </h3>
+                <GuessTime onSetTime={setTime}></GuessTime>
+              </div>
             </div>
           </div>
+          <h3 class="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">
+            Now Playing
+          </h3>
+          <h4 class="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">
+            Your Favourite Playlist
+          </h4>
+          <img
+            src="/images/icon.png"
+            alt="Icon"
+            className="object-contain scale-50 -mt-[40px]"
+          />
         </div>
-        <h3 class="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">Now Playing</h3>
-      <h4 class="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">Your Favourite Playlist</h4>
-        <img
-        src="/images/icon.png"
-        alt="Icon"
-        className="object-contain scale-50 -mt-[40px]"
-      />
       </div>
-      </div>
-      <StartGameButton rounds={rounds} songs={songs} time={time}/>
+      <StartGameButton rounds={rounds} songs={songs} time={time} />
     </div>
     // </body>
   );
