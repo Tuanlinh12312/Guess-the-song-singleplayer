@@ -113,7 +113,6 @@ const MainGame = () => {
         Guess the Song
       </h1>
   
-      {/* Song Player */}
       {song && (
         <SongPlayer
           song={song}
