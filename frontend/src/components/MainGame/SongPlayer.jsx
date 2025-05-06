@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 
 const SongPlayer = ({ song, onPlay, roundEnded }) => {
   const playerRef = useRef(null);
-  const isReadyRef = useRef(false); // Tracks when the player is ready
+  const isReadyRef = useRef(false);
 
   const extractVideoID = (url) => {
     try {
@@ -27,37 +27,8 @@ const SongPlayer = ({ song, onPlay, roundEnded }) => {
     },
   };
 
-  useEffect(() => {
-    if (
-      roundEnded &&
-      playerRef.current &&
-      typeof playerRef.current.pauseVideo === "function"
-    ) {
-      playerRef.current.pauseVideo();
-    }
-  }, [roundEnded]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const player = playerRef.current;
-      if (
-        isReadyRef.current &&
-        player &&
-        typeof player.getCurrentTime === "function" &&
-        typeof player.pauseVideo === "function"
-      ) {
-        const time = player.getCurrentTime();
-        if (time >= song.end) {
-          player.pauseVideo();
-        }
-      }
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, [song]);
-
   const handleStateChange = (event) => {
-    // event.data === 1 means video started playing
+    // 1 = playing
     if (event.data === 1 && typeof onPlay === "function") {
       onPlay();
     }
@@ -72,6 +43,8 @@ const SongPlayer = ({ song, onPlay, roundEnded }) => {
       console.warn("Failed to set volume:", err);
     }
   };
+
+  if (roundEnded || !videoId) return null;
 
   return (
     <div className="invisible">

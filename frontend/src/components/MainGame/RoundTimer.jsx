@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 
-const RoundTimer = ({ timeCap, isPlaying, onTimeOut }) => {
-  const [timeLeft, setTimeLeft] = useState(timeCap);
-
+const RoundTimer = ({ timeCap, isPlaying, onTimeOut, timeLeft, setTimeLeft }) => {
   useEffect(() => {
     if (!isPlaying) return;
 
-    setTimeLeft(timeCap); // Reset the timer
+    setTimeLeft(timeCap); // Reset timer at start
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          onTimeOut(); // ⏱️ Inform MainGame
+          onTimeOut();
           return 0;
         }
         return prev - 1;

@@ -18,6 +18,7 @@ const MainGame = () => {
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [timeCap, setTimeCap] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(null); // ⏱️ Lifted to MainGame
   const [isPlaying, setIsPlaying] = useState(false);
   const [guessHistory, setGuessHistory] = useState([]);
   const [titleGuessed, setTitle] = useState(0);
@@ -34,6 +35,7 @@ const MainGame = () => {
         setSong(response.data.song);
         setRound(response.data.round);
         setTimeCap(response.data.time);
+        setTimeLeft(response.data.time); // initialize timer state
       }
     } catch (error) {
       console.error("Error fetching game status:", error);
@@ -51,7 +53,16 @@ const MainGame = () => {
       const correctArtist = response.data.point & 1;
       const message = response.data.message;
 
-      setScore((score) => score + response.data.point);
+      setScore((score) => {
+        const T_used = timeCap - timeLeft;
+        const progress = Math.min(T_used / timeCap, 1);
+        const timeFactor = 0.5 + 0.5 * Math.cos(progress * Math.PI); // smooth decay from 1 → 0.5
+        const adjustedPoints = Math.round(
+          response.data.point * 100 * timeFactor
+        );
+        return score + adjustedPoints;
+      });
+
       setFeedback(message);
       setGuess("");
 
@@ -135,14 +146,17 @@ const MainGame = () => {
                   key={round}
                   timeCap={timeCap}
                   isPlaying={isPlaying}
-                  onTimeOut={() => setRoundEnded(false)}
+                  onTimeOut={() => setRoundEnded(true)}
+                  timeLeft={timeLeft}
+                  setTimeLeft={setTimeLeft}
                 />
               </div>
             </div>
 
             <div
               className="flex flex-row"
-              style={{ height: "calc(100vh - 180px)" }}>
+              style={{ height: "calc(100vh - 180px)" }}
+            >
               <div className="flex flex-col ml-10 mt-3 w-1/6 mr-3">
                 <Score score={score} />
                 <GuessChecklist
@@ -166,6 +180,7 @@ const MainGame = () => {
                   setGuess={setGuess}
                   onSubmit={handleGuess}
                   guessHistory={guessHistory}
+                  disabled={roundEnded}
                 />
               </div>
             </div>

@@ -1,6 +1,13 @@
 import { useEffect, useRef } from "react";
 
-const GuessBar = ({ guess, feedback, setGuess, onSubmit, guessHistory }) => {
+const GuessBar = ({
+  guess,
+  feedback,
+  setGuess,
+  onSubmit,
+  guessHistory,
+  disabled,
+}) => {
   const chatContainerRef = useRef(null);
 
   // Always scroll to the bottom on guessHistory update
@@ -13,7 +20,9 @@ const GuessBar = ({ guess, feedback, setGuess, onSubmit, guessHistory }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit();
+    if (!disabled) {
+      onSubmit();
+    }
   };
 
   return (
@@ -52,16 +61,23 @@ const GuessBar = ({ guess, feedback, setGuess, onSubmit, guessHistory }) => {
       <div className="flex flex-row mt-3">
         <input
           type="text"
-          className="p-2 rounded-2xl text-black w-[calc(100%-90px)] h-10 font-EBGaramond placeholder-black px-4 py-1 ml-5 bg-type"
+          className={`p-2 rounded-2xl text-black w-[calc(100%-90px)] h-10 font-EBGaramond placeholder-black px-4 py-1 ml-5 bg-type ${
+            disabled ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           placeholder="Type your guess..."
           value={guess}
           onChange={(e) => setGuess(e.target.value)}
+          disabled={disabled}
         />
-        <button type="submit" className="flex">
-          <img 
-            src="/images/send.png" 
-            alt="send" 
-            className="object-contain w-10 h-10 ml-3 mb-4 mr-3" 
+        <button
+          type="submit"
+          className={`flex ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+          disabled={disabled}
+        >
+          <img
+            src="/images/send.png"
+            alt="send"
+            className="object-contain w-10 h-10 ml-3 mb-4 mr-3"
           />
         </button>
       </div>

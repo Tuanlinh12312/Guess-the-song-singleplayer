@@ -9,9 +9,26 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"fmt"
+	"golang.org/x/text/unicode/norm"
+	"unicode"
 )
 
+// removeDiacritics removes Vietnamese tone marks and other accents
+func removeDiacritics(s string) string {
+	t := norm.NFD.String(s)
+	var b strings.Builder
+	for _, r := range t {
+		if unicode.Is(unicode.Mn, r) {
+			continue // skip non-spacing marks
+		}
+		b.WriteRune(r)
+	}
+	return b.String()
+}
+
 func match(a, b string) bool {
+	a = removeDiacritics(a)
+	b = removeDiacritics(b)
 	re := regexp.MustCompile(`[^a-zA-Z0-9]`)
 	a = strings.ToLower(re.ReplaceAllString(a, ""))
 	b = strings.ToLower(re.ReplaceAllString(b, ""))

@@ -12,84 +12,96 @@ const GameSetup = () => {
   const [time, setTime] = useState(0);
 
   const handleAddSong = async (url, cnt) => {
-    if (cnt === -1) {
-      // Add a single song
-      console.log("Fetching single song:", url);
-      try {
+    const isDuplicate = (newSong) =>
+      songs.some((existingSong) => existingSong.url === newSong.url);
+  
+    const addUniqueSongs = (newSongs) => {
+      const uniqueSongs = [];
+      let duplicates = 0;
+  
+      for (const song of newSongs) {
+        if (!isDuplicate(song)) {
+          uniqueSongs.push(song);
+        } else {
+          duplicates++;
+        }
+      }
+  
+      if (duplicates > 0) {
+        alert(`${duplicates} duplicate song${duplicates > 1 ? "s" : ""} were skipped.`);
+      }
+  
+      if (uniqueSongs.length > 0) {
+        setSongs((prev) => [...prev, ...uniqueSongs]);
+      }
+    };
+  
+    try {
+      if (cnt === -1) {
+        // Single song
+        console.log("Fetching single song:", url);
         const response = await axios.post("http://localhost:8080/GetNameArtist", { url });
         console.log("Fetched song:", response.data.song);
-        setSongs((prev) => [...prev, response.data.song]);
-      } catch (err) {
-        console.error("Error fetching single song:", err);
-      }
-    } else if (cnt === -2) {
-      // Add a playlist
-      console.log("Fetching playlist from:", url);
-      try {
+        addUniqueSongs([response.data.song]);
+      } else if (cnt === -2) {
+        // Playlist
+        console.log("Fetching playlist from:", url);
         const response = await axios.post("http://localhost:8080/GetPlaylist", { url });
         const list = response.data.playlist;
         if (Array.isArray(list)) {
           console.log("Fetched playlist:", list);
-          setSongs((prev) => [...prev, ...list]);
+          addUniqueSongs(list);
         }
-      } catch (err) {
-        console.error("Error fetching playlist:", err);
-      }
-    } else {
-      // Add a list of suggested songs
-      console.log(`Fetching ${cnt} suggested songs from:`, url);
-      try {
-        const response = await axios.post("http://localhost:8080/GetWatchlist", {
-          url,
-          cnt,
-        });
-  
+      } else {
+        // Watchlist
+        console.log(`Fetching ${cnt} suggested songs from:`, url);
+        const response = await axios.post("http://localhost:8080/GetWatchlist", { url, cnt });
         const list = response.data.watchlist;
         if (Array.isArray(list)) {
           console.log("Fetched watchlist:", list);
-          setSongs((prev) => [...prev, ...list]);
+          addUniqueSongs(list);
         }
-      } catch (err) {
-        console.error("Error fetching suggested songs:", err);
       }
+    } catch (err) {
+      console.error("Error fetching songs:", err);
     }
-  };  
+  };
 
   const handleDeleteSong = (index) => {
     setSongs(songs.filter((_, i) => i !== index));
   };
 
   return (
-    // <body class="overflow-hidden">
-    <div class="bg-image h-screen bg-cover bg-center bg-fixed">
-      <h1 class="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] tracking-wide text-center w-full uppercase text-white">
+    // <body className="overflow-hidden">
+    <div className="bg-image h-screen bg-cover bg-center bg-fixed">
+      <h1 className="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] tracking-wide text-center w-full uppercase text-white">
         Guess the song
       </h1>
-      <div class="flex h-[calc(100%-230px)]">
+      <div className="flex h-[calc(100%-230px)]">
         <SongList songs={songs} onDeleteSong={handleDeleteSong} />
-        <div class="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
-          <div class="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
-            <div class="flex items-start w-full mb-6">
-              <div class="flex flex-col px-6 w-full">
-                <h2 class="text-center font-bold text-3xl font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mt-2 mb-2">
+        <div className="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
+          <div className="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
+            <div className="flex items-start w-full mb-6">
+              <div className="flex flex-col px-6 w-full">
+                <h2 className="text-center font-bold text-3xl font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mt-2 mb-2">
                   Number of Rounds
                 </h2>
                 <RoundInput onSetRounds={setRounds} />
-                <h3 class="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
+                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
                   Your Song
                 </h3>
                 <SongInput onAddSong={handleAddSong} />
-                <h3 class="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
+                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
                   Guess Time
                 </h3>
                 <GuessTime onSetTime={setTime}></GuessTime>
               </div>
             </div>
           </div>
-          <h3 class="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">
+          <h3 className="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">
             Now Playing
           </h3>
-          <h4 class="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">
+          <h4 className="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black] ">
             Your Favourite Playlist
           </h4>
           <img

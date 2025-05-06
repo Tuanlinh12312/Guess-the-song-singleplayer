@@ -59,9 +59,9 @@ const StartGameButton = ({ rounds, songs, time }) => {
   };
 
   return (
-    <div class="flex flex-col justify-start items-center ml-auto">
-    <div class="flex flex-col items-center mt-7"> 
-    <button class="flex justify-center items-center mt-3"
+    <div className="flex flex-col justify-start items-center ml-auto">
+    <div className="flex flex-col items-center mt-7"> 
+    <button className="flex justify-center items-center mt-3"
     onClick={handleStartGame} disabled={loading}>
     <img 
       src="/images/icon1.png" 

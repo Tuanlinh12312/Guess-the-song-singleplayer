@@ -5,9 +5,10 @@ import (
 
 	"fmt"
 	"regexp"
+	"strings"
 
-	"github.com/raitonoberu/ytmusic"
 	"github.com/garnermccloud/youtube"
+	"github.com/raitonoberu/ytmusic"
 )
 
 func extractVideoID(url string) (string, error) {
@@ -21,17 +22,28 @@ func extractVideoID(url string) (string, error) {
 }
 
 func fixTitle(title *string, artists *[]string) {
-	feat := regexp.MustCompile(`\((?:feat\.|ft\.)\s+([^()]+)\)`)
+	// Match (feat. A, B), (feat. A & B), or (feat. A and B), case-insensitive
+	feat := regexp.MustCompile(`(?i)\((?:feat\.|ft\.)\s+([^)]+)\)`)
 	matches := feat.FindAllStringSubmatch(*title, -1)
 
 	for _, match := range matches {
 		if len(match) > 1 {
-			*artists = append(*artists, match[1])
+			// Split artists by comma, ampersand, or 'and'
+			split := regexp.MustCompile(`\s*(,|&|and)\s*`)
+			names := split.Split(match[1], -1)
+			for _, name := range names {
+				trimmed := strings.TrimSpace(name)
+				if trimmed != "" {
+					*artists = append(*artists, trimmed)
+				}
+			}
 		}
 	}
 
-	brackets := regexp.MustCompile(`\((.*?)\)|\[(.*?)\]`)
+	// Remove all brackets (e.g. (feat. ...), (Live), [Remix])
+	brackets := regexp.MustCompile(`\s*(\([^()]*\)|\[[^\[\]]*\])`)
 	*title = brackets.ReplaceAllString(*title, "")
+	*title = strings.TrimSpace(*title)
 }
 
 func extractSongInfo(t *ytmusic.TrackItem) database.Song {
