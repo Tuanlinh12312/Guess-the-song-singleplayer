@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 
 const SongPlayer = ({ song, onPlay, roundEnded }) => {
   const playerRef = useRef(null);
+  const isReadyRef = useRef(false); // Tracks when the player is ready
 
   const extractVideoID = (url) => {
     try {
@@ -27,8 +28,11 @@ const SongPlayer = ({ song, onPlay, roundEnded }) => {
   };
 
   useEffect(() => {
-    // Pause when round ends
-    if (roundEnded && playerRef.current) {
+    if (
+      roundEnded &&
+      playerRef.current &&
+      typeof playerRef.current.pauseVideo === "function"
+    ) {
       playerRef.current.pauseVideo();
     }
   }, [roundEnded]);
@@ -36,19 +40,36 @@ const SongPlayer = ({ song, onPlay, roundEnded }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const player = playerRef.current;
-      if (player && typeof player.getCurrentTime === "function") {
+      if (
+        isReadyRef.current &&
+        player &&
+        typeof player.getCurrentTime === "function" &&
+        typeof player.pauseVideo === "function"
+      ) {
         const time = player.getCurrentTime();
         if (time >= song.end) {
           player.pauseVideo();
         }
       }
     }, 500);
+
     return () => clearInterval(interval);
   }, [song]);
 
   const handleStateChange = (event) => {
+    // event.data === 1 means video started playing
     if (event.data === 1 && typeof onPlay === "function") {
-      onPlay(); // Start game when video plays
+      onPlay();
+    }
+  };
+
+  const handleReady = (event) => {
+    playerRef.current = event.target;
+    isReadyRef.current = true;
+    try {
+      event.target.setVolume(100);
+    } catch (err) {
+      console.warn("Failed to set volume:", err);
     }
   };
 
@@ -57,10 +78,7 @@ const SongPlayer = ({ song, onPlay, roundEnded }) => {
       <YouTube
         videoId={videoId}
         opts={opts}
-        onReady={(event) => {
-          playerRef.current = event.target;
-          event.target.setVolume(100);
-        }}
+        onReady={handleReady}
         onStateChange={handleStateChange}
       />
     </div>

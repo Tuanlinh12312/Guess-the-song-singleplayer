@@ -22,9 +22,10 @@ const RoundTimer = ({ timeCap, isPlaying, onTimeOut }) => {
   }, [timeCap, isPlaying]);
 
   return (
-    <div className="w-20 h-20 rounded-full bg-b1 flex items-center justify-center text-orange-950 text-center text-4xl font-coiny pt-2 pl-1">{timeLeft}</div>
+    <div className="w-20 h-20 rounded-full bg-b1 flex items-center justify-center text-orange-950 text-center text-4xl font-coiny pt-2 pl-1">
+      {timeLeft}
+    </div>
   );
 };
 
 export default RoundTimer;
-
