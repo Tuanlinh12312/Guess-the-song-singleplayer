@@ -112,7 +112,7 @@ const MainGame = () => {
       <h1 className="text-5xl font-darumadrop font-bold drop-shadow-[4px_4px_0px_black] tracking-wide w-full uppercase text-white ml-10 mt-3">
         Guess the Song
       </h1>
-  
+
       {song && (
         <SongPlayer
           song={song}
@@ -120,7 +120,7 @@ const MainGame = () => {
           roundEnded={roundEnded}
         />
       )}
-  
+
       {gameOver ? (
         <EndGame score={score} />
       ) : !isPlaying && !roundEnded ? (
@@ -128,20 +128,21 @@ const MainGame = () => {
       ) : (
         <>
           <div className={`${roundEnded ? "blur-sm pointer-events-none" : ""}`}>
-            <div className="absolute p-2 top-[60px] right-7 z-10">
-              <RoundTimer
-                key={round}
-                timeCap={timeCap}
-                isPlaying={isPlaying}
-                onTimeOut={() => setRoundEnded(true)}
-              />
+            <div className="relative">
+              <RoundCount round={round} />
+              <div className="absolute -top-2 right-7 will-change-transform">
+                <RoundTimer
+                  key={round}
+                  timeCap={timeCap}
+                  isPlaying={isPlaying}
+                  onTimeOut={() => setRoundEnded(false)}
+                />
+              </div>
             </div>
-            <RoundCount round={round} />
-  
+
             <div
               className="flex flex-row"
-              style={{ height: "calc(100vh - 180px)" }}
-            >
+              style={{ height: "calc(100vh - 180px)" }}>
               <div className="flex flex-col ml-10 mt-3 w-1/6 mr-3">
                 <Score score={score} />
                 <GuessChecklist
@@ -157,7 +158,7 @@ const MainGame = () => {
                   />
                 </div>
               </div>
-  
+
               <div className="flex flex-col w-5/6 ml-3 mr-10 bg-amber-900/10 mt-3 rounded-lg">
                 <GuessBar
                   guess={guess}
@@ -169,9 +170,9 @@ const MainGame = () => {
               </div>
             </div>
           </div>
-  
+
           {roundEnded && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
+            <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-lg bg-black/40">
               <EndRound song={song} onNextRound={goToNextRound} />
             </div>
           )}
@@ -179,7 +180,6 @@ const MainGame = () => {
       )}
     </div>
   );
-  
 };
 
 export default MainGame;
