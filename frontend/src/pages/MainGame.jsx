@@ -18,12 +18,22 @@ const MainGame = () => {
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [timeCap, setTimeCap] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(null); // ⏱️ Lifted to MainGame
+  const [timeLeft, setTimeLeft] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [guessHistory, setGuessHistory] = useState([]);
   const [titleGuessed, setTitle] = useState(0);
   const [artistsGuessed, setArtists] = useState(0);
   const [roundEnded, setRoundEnded] = useState(false);
+
+  // Statistics
+  const [totalTitles, setTotalTitles] = useState(0);
+  const [totalTitleGuessed, setTotalTitleGuessed] = useState(0);
+  const [totalArtists, setTotalArtists] = useState(0);
+  const [totalArtistsGuessed, setTotalArtistsGuessed] = useState(0);
+
+  const [perfectRounds, setPerfectRounds] = useState(0);
+  const [roundScores, setRoundScores] = useState([]);
+  const [currentScore, setCurrentScore] = useState(0);
 
   const fetchGameStatus = async () => {
     try {
@@ -35,7 +45,7 @@ const MainGame = () => {
         setSong(response.data.song);
         setRound(response.data.round);
         setTimeCap(response.data.time);
-        setTimeLeft(response.data.time); // initialize timer state
+        setTimeLeft(response.data.time);
       }
     } catch (error) {
       console.error("Error fetching game status:", error);
@@ -53,19 +63,30 @@ const MainGame = () => {
       const correctArtist = response.data.point & 1;
       const message = response.data.message;
 
-      setScore((score) => {
+      if (isCorrect) {
         const T_used = timeCap - timeLeft;
         const progress = Math.min(T_used / timeCap, 1);
-        const timeFactor = 0.5 + 0.5 * Math.cos(progress * Math.PI); // smooth decay from 1 → 0.5
+        const timeFactor = 0.5 + 0.5 * Math.cos(progress * Math.PI);
         const adjustedPoints = Math.round(
           response.data.point * 100 * timeFactor
         );
-        return score + adjustedPoints;
-      });
+
+        setScore((prev) => prev + adjustedPoints);
+        setCurrentScore((prev) => prev + adjustedPoints);
+
+        if (correctArtist) {
+          setArtists((cnt) => cnt + 1); // per-round count
+          setTotalArtistsGuessed((cnt) => cnt + 1); // total count
+        }
+
+        if (correctTitle) {
+          setTitle((cnt) => cnt + 1); // round-local flag
+          setTotalTitleGuessed((cnt) => cnt + 1); // cumulative stat
+        }
+      }
 
       setFeedback(message);
       setGuess("");
-
       setGuessHistory((prev) => [
         ...prev,
         {
@@ -73,13 +94,6 @@ const MainGame = () => {
           feedback: isCorrect ? message : null,
         },
       ]);
-
-      if (correctArtist) {
-        setArtists((cnt) => cnt + 1);
-      }
-      if (correctTitle) {
-        setTitle((cnt) => cnt + 1);
-      }
     } catch (error) {
       console.error("Error validating guess:", error);
     }
@@ -88,12 +102,17 @@ const MainGame = () => {
   const goToNextRound = async () => {
     try {
       await axios.post("http://localhost:8080/NextRound");
-
+      if (titleGuessed && artistsGuessed === song?.artists.length) {
+        setPerfectRounds((cnt) => cnt + 1);
+      }
+      setTotalTitles((prev) => prev + 1);
+      setTotalArtists((prev) => prev + (song.artists?.length || 0));
       setTitle(0);
       setArtists(0);
       setRoundEnded(false);
       setIsPlaying(false);
-
+      setRoundScores((prev) => [...prev, { round, score: currentScore, song }]);
+      setCurrentScore(0);
       await fetchGameStatus();
     } catch (err) {
       console.error("Error advancing to next round:", err);
@@ -133,7 +152,15 @@ const MainGame = () => {
       )}
 
       {gameOver ? (
-        <EndGame score={score} />
+        <EndGame
+          score={score}
+          artistsGuessed={totalArtistsGuessed}
+          titlesGuessed={totalTitleGuessed}
+          perfectRounds={perfectRounds}
+          roundScores={roundScores}
+          totalArtists={totalArtists}
+          totalTitles={totalTitles}
+        />
       ) : !isPlaying && !roundEnded ? (
         <Loading />
       ) : (
