@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const EndGame = ({
   score,
   artistsGuessed,
@@ -7,6 +9,8 @@ const EndGame = ({
   totalArtists,
   totalTitles,
 }) => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
   const bestRound =
     roundScores.length > 0
       ? roundScores.reduce((best, r) => (r.score > best.score ? r : best))
@@ -25,7 +29,7 @@ const EndGame = ({
   })();
 
   const handlePlayAgain = () => {
-    window.location.reload();
+    navigate("/"); // Navigate to the homepage ("/")
   };
 
   return (
