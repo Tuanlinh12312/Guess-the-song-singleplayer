@@ -13,7 +13,7 @@ import (
 	"unicode"
 )
 
-// removeDiacritics removes Vietnamese tone marks and other accents
+// removeDiacritics removes all tone marks
 func removeDiacritics(s string) string {
 	t := norm.NFD.String(s)
 	var b strings.Builder
@@ -21,17 +21,22 @@ func removeDiacritics(s string) string {
 		if unicode.Is(unicode.Mn, r) {
 			continue // skip non-spacing marks
 		}
+		if r == 'đ' || r == 'Đ' {
+			r = 'd'
+		}
 		b.WriteRune(r)
 	}
 	return b.String()
 }
 
 func match(a, b string) bool {
+	fmt.Printf("Uncleaned A: '%s'\n", strings.ToLower(a))
+	fmt.Printf("Uncleaned B: '%s'\n", strings.ToLower(b))
 	a = removeDiacritics(a)
 	b = removeDiacritics(b)
 	re := regexp.MustCompile(`[^a-zA-Z0-9]`)
-	a = strings.ToLower(re.ReplaceAllString(a, ""))
-	b = strings.ToLower(re.ReplaceAllString(b, ""))
+	a = re.ReplaceAllString(strings.ToLower(a), "")
+	b = re.ReplaceAllString(strings.ToLower(b), "")
 	fmt.Printf("Cleaned A: '%s'\n", a)
 	fmt.Printf("Cleaned B: '%s'\n", b)
 	return a == b

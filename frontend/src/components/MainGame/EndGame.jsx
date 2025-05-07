@@ -8,23 +8,32 @@ const EndGame = ({
   roundScores,
   totalArtists,
   totalTitles,
+  diff,
 }) => {
   const navigate = useNavigate(); // Initialize useNavigate hook
 
   const bestRound =
     roundScores.length > 0
-      ? roundScores.reduce((best, r) => (r.score > best.score ? r : best))
+      ? roundScores.reduce((best, r) => (r.score/r.totalScore > best.score/best.totalScore ? r : best))
       : null;
 
   const grade = (() => {
     const maxScore = totalTitles * 200 + totalArtists * 100;
-    const percent = score / maxScore;
+    const percent = score / maxScore + 0.1*diff;
 
-    if (percent >= 0.95) return "S";
-    if (percent >= 0.85) return "A";
-    if (percent >= 0.7) return "B";
-    if (percent >= 0.55) return "C";
-    if (percent >= 0.4) return "D";
+    if (percent >= 0.7) return "S";
+    if (percent >= 0.65) return "A+";
+    if (percent >= 0.6) return "A";
+    if (percent >= 0.55) return "A-";
+    if (percent >= 0.5) return "B+";
+    if (percent >= 0.45) return "B";
+    if (percent >= 0.4) return "B-";
+    if (percent >= 0.35) return "C+";
+    if (percent >= 0.3) return "C";
+    if (percent >= 0.25) return "C-";
+    if (percent >= 0.2) return "D+";
+    if (percent >= 0.15) return "D";
+    if (percent >= 0.1) return "D-";
     return "F";
   })();
 

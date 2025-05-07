@@ -30,7 +30,7 @@ const DisplaySong = ({ title, artists, thumbnail, icon }) => {
       )}
       <div className="flex-1 flex flex-col ml-2">
         <span className="text-lg font-bold text-gray-900 uppercase -mb-1">{title}</span>
-        <span className="text-sm text-gray-700">{artists.join(", ")}</span>
+        <span className="text-sm text-gray-700">{artists?.join(", ")}</span>
         <img
           src={icon}
           alt="Icon"

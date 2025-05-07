@@ -26,6 +26,7 @@ const MainGame = () => {
   const [roundEnded, setRoundEnded] = useState(false);
 
   // Statistics
+  const [diff, setDiff] = useState(0);
   const [totalTitles, setTotalTitles] = useState(0);
   const [totalTitleGuessed, setTotalTitleGuessed] = useState(0);
   const [totalArtists, setTotalArtists] = useState(0);
@@ -46,6 +47,9 @@ const MainGame = () => {
         setRound(response.data.round);
         setTimeCap(response.data.time);
         setTimeLeft(response.data.time);
+
+        if (timeCap == 60) setDiff(1);
+        if (timeCap == 90) setDiff(2);
       }
     } catch (error) {
       console.error("Error fetching game status:", error);
@@ -66,7 +70,7 @@ const MainGame = () => {
       if (isCorrect) {
         const T_used = timeCap - timeLeft;
         const progress = Math.min(T_used / timeCap, 1);
-        const timeFactor = 0.5 + 0.5 * Math.cos(progress * Math.PI);
+        const timeFactor = 0.7 + 0.3 * Math.cos(progress * Math.PI);
         const adjustedPoints = Math.round(
           response.data.point * 100 * timeFactor
         );
@@ -102,7 +106,7 @@ const MainGame = () => {
   const goToNextRound = async () => {
     try {
       await axios.post("http://localhost:8080/NextRound");
-      if (titleGuessed && artistsGuessed === song?.artists.length) {
+      if (titleGuessed && artistsGuessed === (song?.artists?.length || 0)) {
         setPerfectRounds((cnt) => cnt + 1);
       }
       setTotalTitles((prev) => prev + 1);
@@ -111,7 +115,7 @@ const MainGame = () => {
       setArtists(0);
       setRoundEnded(false);
       setIsPlaying(false);
-      setRoundScores((prev) => [...prev, { round, score: currentScore, song }]);
+      setRoundScores((prev) => [...prev, { round, score: currentScore, song, totalScore: (song.artists?.length || 0)*100+200 }]);
       setCurrentScore(0);
       await fetchGameStatus();
     } catch (err) {
@@ -125,7 +129,7 @@ const MainGame = () => {
 
   useEffect(() => {
     if (
-      (titleGuessed && artistsGuessed === song?.artists.length) ||
+      (titleGuessed && artistsGuessed === (song?.artists?.length || 0)) ||
       timeCap === 0
     ) {
       setRoundEnded(true);
@@ -167,6 +171,7 @@ const MainGame = () => {
           roundScores={roundScores}
           totalArtists={totalArtists}
           totalTitles={totalTitles}
+          diff={diff}
         />
       ) : !isPlaying && !roundEnded ? (
         <Loading />
@@ -195,7 +200,7 @@ const MainGame = () => {
                 <GuessChecklist
                   guessedTitle={titleGuessed}
                   guessedArtists={artistsGuessed}
-                  totalArtists={song?.artists.length || 0}
+                  totalArtists={song?.artists?.length || 0}
                 />
                 <div className="flex flex-1 items-end justify-center mt-4">
                   <img

@@ -21,14 +21,26 @@ func extractVideoID(url string) (string, error) {
 	return "", fmt.Errorf("invalid URL")
 }
 
+func uniqueArtists(input []string) []string {
+	seen := map[string]bool{}
+	var result []string
+	for _, artist := range input {
+		key := strings.ToLower(strings.TrimSpace(artist))
+		if key != "" && !seen[key] {
+			seen[key] = true
+			result = append(result, artist)
+		}
+	}
+	return result
+}
+
 func fixTitle(title *string, artists *[]string) {
-	// Match (feat. A, B), (feat. A & B), or (feat. A and B), case-insensitive
-	feat := regexp.MustCompile(`(?i)\((?:feat\.|ft\.)\s+([^)]+)\)`)
+	// Step 1: Extract (feat/ft) patterns inside brackets
+	feat := regexp.MustCompile(`(?i)\((?:feat\.?|ft\.?)\s+([^)]+)\)`)
 	matches := feat.FindAllStringSubmatch(*title, -1)
 
 	for _, match := range matches {
 		if len(match) > 1 {
-			// Split artists by comma, ampersand, or 'and'
 			split := regexp.MustCompile(`\s*(,|&|and)\s*`)
 			names := split.Split(match[1], -1)
 			for _, name := range names {
@@ -40,10 +52,67 @@ func fixTitle(title *string, artists *[]string) {
 		}
 	}
 
-	// Remove all brackets (e.g. (feat. ...), (Live), [Remix])
+	// Step 2: Remove all bracketed metadata
 	brackets := regexp.MustCompile(`\s*(\([^()]*\)|\[[^\[\]]*\])`)
-	*title = brackets.ReplaceAllString(*title, "")
-	*title = strings.TrimSpace(*title)
+	cleanTitle := brackets.ReplaceAllString(*title, "")
+	cleanTitle = strings.TrimSpace(cleanTitle)
+
+	// Step 3: Extract feat/ft not in brackets
+	outsideFeat := regexp.MustCompile(`(?i)(?:feat\.?|ft\.?)\s+(.+)$`)
+	if match := outsideFeat.FindStringSubmatch(cleanTitle); len(match) > 1 {
+		split := regexp.MustCompile(`\s*(,|&|and)\s*`)
+		names := split.Split(match[1], -1)
+		for _, name := range names {
+			trimmed := strings.TrimSpace(name)
+			if trimmed != "" {
+				*artists = append(*artists, trimmed)
+			}
+		}
+		cleanTitle = outsideFeat.ReplaceAllString(cleanTitle, "")
+		cleanTitle = strings.TrimSpace(cleanTitle)
+	}
+
+	// Step 4: Remove common suffixes like remix, version, ver., etc.
+	suffixes := regexp.MustCompile(`(?i)\b(remix|live|edit|explicit|clean|original mix|ver\.?|version|piano version|acoustic)\b`)
+	cleanTitle = suffixes.ReplaceAllString(cleanTitle, "")
+	cleanTitle = strings.TrimSpace(cleanTitle)
+
+	// Step 4.5: Replace " x " or " X " (used as separator) with delimiter
+	cleanTitle = regexp.MustCompile(`(?i)\s+x\s+`).ReplaceAllString(cleanTitle, " | ")
+
+	// Step 5: Split by non-letter, non-whitespace (preserving accents and words)
+	splitRegex := regexp.MustCompile(`[^\p{L}\p{Zs}]+`)
+	parts := splitRegex.Split(cleanTitle, -1)
+
+	if len(parts) <= 1 {
+		*title = cleanTitle
+		*artists = uniqueArtists(*artists)
+		return
+	}
+
+	// Find longest part => assume it's the title
+	longestIdx := 0
+	maxLen := len(parts[0])
+	for i, part := range parts {
+		if len(part) > maxLen {
+			longestIdx = i
+			maxLen = len(part)
+		}
+	}
+
+	finalTitle := strings.TrimSpace(parts[longestIdx])
+	var newArtists []string
+	for i, part := range parts {
+		if i != longestIdx {
+			p := strings.TrimSpace(part)
+			if p != "" {
+				newArtists = append(newArtists, p)
+			}
+		}
+	}
+
+	*title = finalTitle
+	*artists = uniqueArtists(append(*artists, newArtists...))
 }
 
 func extractSongInfo(t *ytmusic.TrackItem) database.Song {
