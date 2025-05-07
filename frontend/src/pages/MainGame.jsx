@@ -139,9 +139,16 @@ const MainGame = () => {
 
   return (
     <div className="relative flex flex-col min-h-screen max-h-screen bg-image bg-cover bg-center bg-fixed overflow-hidden">
-      <h1 className="text-5xl font-darumadrop font-bold drop-shadow-[4px_4px_0px_black] tracking-wide w-full uppercase text-white ml-10 mt-3">
-        Guess the Song
-      </h1>
+      <div className="flex items-center ml-10 mt-3">
+        <img
+          src="images/logo.png"
+          alt="Guess the Song Logo"
+          className="w-20 h-auto mr-3 mt-3"
+        />
+        <h1 className="text-5xl font-darumadrop font-bold drop-shadow-[4px_4px_0px_black] tracking-wide w-full uppercase text-white">
+          Guess the Song
+        </h1>
+      </div>
 
       {song && (
         <SongPlayer
@@ -182,8 +189,7 @@ const MainGame = () => {
 
             <div
               className="flex flex-row"
-              style={{ height: "calc(100vh - 180px)" }}
-            >
+              style={{ height: "calc(100vh - 180px)" }}>
               <div className="flex flex-col ml-10 mt-3 w-1/6 mr-3">
                 <Score score={score} />
                 <GuessChecklist

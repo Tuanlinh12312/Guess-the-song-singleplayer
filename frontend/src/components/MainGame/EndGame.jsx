@@ -13,14 +13,14 @@ const EndGame = ({
       : null;
 
   const grade = (() => {
-    const maxScore = totalTitles*200 + totalArtists*100;
+    const maxScore = totalTitles * 200 + totalArtists * 100;
     const percent = score / maxScore;
 
     if (percent >= 0.95) return "S";
     if (percent >= 0.85) return "A";
-    if (percent >= 0.70) return "B";
+    if (percent >= 0.7) return "B";
     if (percent >= 0.55) return "C";
-    if (percent >= 0.40) return "D";
+    if (percent >= 0.4) return "D";
     return "F";
   })();
 
@@ -29,62 +29,94 @@ const EndGame = ({
   };
 
   return (
-    <div className="text-center text-white p-10 bg-black/70 rounded-xl shadow-lg mx-auto mt-10 w-4/5 max-w-2xl">
-      <h2 className="text-4xl text-yellow-300 font-bold mb-4">🎉 Game Over!</h2>
+    <div className="w-full h-full flex flex-col justify-center items-center bg-transparent">
+      <h2 className="text-8xl font-bold font-darumadrop text-center drop-shadow-[4px_4px_0px_white] -mt-3">
+        Game Over
+      </h2>
 
-      <p className="text-2xl mb-2">
-        Final Score: <span className="text-green-400 font-bold">{score}</span>
-      </p>
-      <p className="text-lg mb-2">
-        Titles guessed:{" "}
-        <span className="text-blue-300 font-semibold">
-          {titlesGuessed} / {totalTitles}
-        </span>
-      </p>
-      <p className="text-lg mb-2">
-        Artists guessed:{" "}
-        <span className="text-pink-300 font-semibold">
-          {artistsGuessed} / {totalArtists}
-        </span>
-      </p>
-      <p className="text-lg mb-2">
-        Perfect rounds:{" "}
-        <span className="text-purple-300 font-semibold">{perfectRounds}</span>
-      </p>
+      <div className="flex flex-col w-[calc(33.33%-100px)] h-[190px] items-center mt-4 bg-amber-900/10">
+        <p className="text-5xl mt-4 font-extrabold font-coiny">
+          <div>RANK</div>
+          <span className="ml-12 font-extrabold text-8xl">{grade}</span>
+        </p>
+        <p className="text-2xl font-EBGaramond -mt-4">
+          Final Score: <span className="font-bold">{score}</span>
+        </p>
+      </div>
 
-      {bestRound && bestRound.song && (
-        <div className="mt-4 mb-2">
-          <p className="text-lg mb-1 text-orange-300 font-semibold">
-            Best round: Round {bestRound.round} ({bestRound.score} pts)
-          </p>
-          <img
-            src={bestRound.song.thumbnail}
-            alt="Song Thumbnail"
-            className="mx-auto rounded-lg shadow-md w-40 h-40 object-cover"
-          />
-          <p className="text-lg mt-2">
-            <span className="font-semibold">Title:</span>{" "}
-            <span className="text-yellow-200">{bestRound.song.title}</span>
-          </p>
-          <p className="text-lg">
-            <span className="font-semibold">Artist(s):</span>{" "}
-            <span className="text-yellow-200">
-              {bestRound.song.artists?.join(", ")}
+      <div className="flex w-full h-60">
+        <div className="flex flex-row ml-10 mr-10 mt-8 w-full">
+          <div className="flex flex-col bg-amber-900/10 w-[calc(33.33%-120px)] mr-10 items-center">
+            <h2 className="text-2xl mt-5 font-bold font-coiny text-center drop-shadow-[2px_2px_0px_white] uppercase">
+              You have guessed
+            </h2>
+
+            <span className="font-EBGaramond font-semibold text-2xl mt-5">
+              🎵 {titlesGuessed} / {totalTitles} titles
             </span>
-          </p>
+
+            <span className="font-EBGaramond font-semibold text-2xl mt-5">
+              🎤 {artistsGuessed} / {totalArtists} artists
+            </span>
+          </div>
+
+          <div className="flex flex-col bg-amber-900/10 items-center w-[calc(33.33%-120px)]">
+            <h3 className="text-2xl mt-5 font-bold font-coiny drop-shadow-[2px_2px_0px_white] uppercase">
+              Perfect rounds
+            </h3>
+            <span className="font-coiny text-8xl font-bold mt-5">
+              {perfectRounds}
+            </span>
+          </div>
+
+          {bestRound && bestRound.song && (
+            <div className="flex flex-col bg-amber-900/10 items-center ml-10 w-1/2">
+              <p className="text-2xl mt-5 font-bold font-coiny drop-shadow-[2px_2px_0px_white] uppercase">
+                Best round
+              </p>
+
+              <div className="bg-white bg-opacity-50 p-4 rounded-2xl shadow-lg flex items-center gap-4 mt-2 justify-between w-4/5 mx-4">
+                <img
+                  src={bestRound.song.thumbnail}
+                  alt="Song Thumbnail"
+                  className="w-16 h-16 rounded-lg object-cover"
+                />
+                <div className="flex-1 flex flex-col ml-2">
+                  <span className="text-lg font-bold text-gray-900 uppercase -mb-1">
+                    {bestRound.song.title}
+                  </span>
+                  <span className="text-sm text-gray-700">
+                    {bestRound.song.artists?.join(", ")}
+                  </span>
+                  <img
+                    src="/images/songlisticon.png"
+                    alt="Icon"
+                    className="w-[calc(100%-20px)] mt-2 rounded-full"
+                  />
+                </div>
+                <div className="flex items-end justify-center mt-12">
+                  <img
+                    src="/images/listsongplay.png"
+                    alt="play"
+                    className="h-7 w-7"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-
-      <p className="text-xl mt-4">
-        Grade:{" "}
-        <span className="text-red-400 font-extrabold text-3xl">{grade}</span>
-      </p>
-
+      </div>
       <button
-        onClick={handlePlayAgain}
-        className="mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-lg rounded-full shadow-lg transition"
-      >
-        🔄 Play Again
+        className="flex justify-center -mt-14 items-center relative w-60 h-72"
+        onClick={handlePlayAgain}>
+        <img
+          src="/images/icon1.png"
+          alt="background"
+          className="absolute w-full h-full object-contain z-0"
+        />
+        <span className="relative z-10 font-darumadrop text-3xl text-black text-center">
+          Play<br />Again
+        </span>
       </button>
     </div>
   );
