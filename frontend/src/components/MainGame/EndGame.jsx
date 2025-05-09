@@ -87,7 +87,7 @@ const EndGame = ({
   const [showGif, setShowGif] = useState(true);
 
   useEffect(() => {
-    if (grade === "A") {
+    if (grade === "A" || grade === "A+" || grade === "A-" || grade === "S") {
       const timer = setTimeout(() => {
         setShowGif(false);
       }, 3000);
