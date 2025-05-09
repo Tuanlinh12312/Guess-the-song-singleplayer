@@ -85,55 +85,54 @@ const GameSetup = () => {
 
   return (
     <div className="bg-image h-screen bg-cover bg-center bg-fixed">
-  <div className="flex justify-center items-center">
-    <img
-      src="images/logo.png"
-      alt="Guess the Song Logo"
-      className="h-28 w-auto mr-4 mt-3"
-    />
-    <h1 className="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] -mt-2 tracking-wide uppercase text-white">
-      Guess the Song
-    </h1>
-  </div>
+      <div className="flex justify-center items-center">
+        <img
+          src="images/logo.png"
+          alt="Guess the Song Logo"
+          className="h-28 w-auto mr-4 mt-3"
+        />
+        <h1 className="text-8xl font-darumadrop font-bold drop-shadow-[8px_8px_0px_black] -mt-2 tracking-wide uppercase text-white">
+          Guess the Song
+        </h1>
+      </div>
 
-  <div className="flex -mt-7 h-[calc(100%-230px)]">
-    <SongList songs={songs} onDeleteSong={handleDeleteSong} />
-    <div className="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
-      <div className="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
-        <div className="flex items-start w-full mb-6">
-          <div className="flex flex-col px-6 w-full">
-            <h2 className="text-center font-bold text-3xl font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mt-2 mb-2">
-              Number of Rounds
-            </h2>
-            <RoundInput onSetRounds={setRounds} />
-            <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
-              Your Song
-            </h3>
-            <SongInput onAddSong={handleAddSong} />
-            <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
-              Guess Time
-            </h3>
-            <GuessTime onSetTime={setTime} />
+      <div className="flex -mt-7 h-[calc(100%-230px)]">
+        <SongList songs={songs} onDeleteSong={handleDeleteSong} />
+        <div className="flex flex-col justify-start mt-10 items-center rounded-3xl bg-amber-900/10 mr-10 ml-auto pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)]">
+          <div className="flex flex-col justify-center items-start rounded-2xl w-[calc(100%-120px)] bg-b1">
+            <div className="flex items-start w-full mb-6">
+              <div className="flex flex-col px-6 w-full">
+                <h2 className="text-center font-bold text-3xl font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mt-2 mb-2">
+                  Number of Rounds
+                </h2>
+                <RoundInput onSetRounds={setRounds} />
+                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
+                  Your Song
+                </h3>
+                <SongInput onAddSong={handleAddSong} />
+                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
+                  Guess Time
+                </h3>
+                <GuessTime onSetTime={setTime} />
+              </div>
+            </div>
           </div>
+          <h3 className="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black]">
+            Now Playing
+          </h3>
+          <h4 className="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black]">
+            Your Favourite Playlist
+          </h4>
+          <img
+            src="/images/icon.png"
+            alt="Icon"
+            className="object-contain scale-50 -mt-[40px]"
+          />
         </div>
       </div>
-      <h3 className="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black]">
-        Now Playing
-      </h3>
-      <h4 className="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black]">
-        Your Favourite Playlist
-      </h4>
-      <img
-        src="/images/icon.png"
-        alt="Icon"
-        className="object-contain scale-50 -mt-[40px]"
-      />
+
+      <StartGameButton rounds={rounds} songs={songs} time={time} />
     </div>
-  </div>
-
-  <StartGameButton rounds={rounds} songs={songs} time={time} />
-</div>
-
   );
 };
 

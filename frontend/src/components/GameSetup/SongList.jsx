@@ -3,11 +3,13 @@ import DisplaySong from "./DisplaySong";
 
 const SongList = ({ songs, onDeleteSong }) => {
   const scrollRef = useRef(null);
+  const prevLengthRef = useRef(songs.length);
 
   useEffect(() => {
-    if (scrollRef.current) {
+    if (songs.length > prevLengthRef.current && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
+    prevLengthRef.current = songs.length;
   }, [songs]);
 
   return (

@@ -1,4 +1,16 @@
+import { useMemo } from "react";
 const EndRound = ({ song, onNextRound }) => {
+  const icon = useMemo(() => {
+    const icons = [
+      "/images/songlisticon.png",
+      "/images/songlisticon1.png",
+      "/images/songlisticon2.png",
+      "/images/songlisticon3.png",
+      "/images/songlisticon4.png",
+    ];
+
+    return icons[Math.floor(Math.random() * icons.length)];
+  }, []);
   if (!song) return null;
 
   return (
@@ -23,7 +35,7 @@ const EndRound = ({ song, onNextRound }) => {
               {song.artists.join(", ")}
             </div>
             <img
-              src="/images/songlisticon.png"
+              src={icon}
               alt="Icon"
               className="w-[calc(100%-20px)] mt-2 rounded-full"
             />
@@ -39,19 +51,19 @@ const EndRound = ({ song, onNextRound }) => {
         </div>
 
         <div className="flex flex-col justify-start items-center h-full w-full">
-            <button
-              className="flex justify-center items-center mt-3 relative w-52 h-32"
-              onClick={onNextRound}>
-              <img
-                src="/images/icon1.png"
-                alt="background"
-                className="absolute w-full h-full object-contain z-0"
-              />
-              <span className="relative z-10 font-darumadrop text-3xl text-black text-center">
-                Next
-              </span>
-            </button>
-          </div>
+          <button
+            className="flex justify-center items-center mt-3 relative w-52 h-32"
+            onClick={onNextRound}>
+            <img
+              src="/images/icon1.png"
+              alt="background"
+              className="absolute w-full h-full object-contain z-0"
+            />
+            <span className="relative z-10 font-darumadrop text-3xl text-black text-center">
+              Next
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );

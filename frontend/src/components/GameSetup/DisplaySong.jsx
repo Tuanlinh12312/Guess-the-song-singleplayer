@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 
 const SongItem = ({ title, artists, thumbnail }) => {
-  // Array of possible icons
   const icon = useMemo(() => {
   const icons = [
     "/images/songlisticon.png",
@@ -11,9 +10,9 @@ const SongItem = ({ title, artists, thumbnail }) => {
     "/images/songlisticon4.png"
   ];
 
-  // Use `useMemo` to ensure each song gets a fixed random icon
+
     return icons[Math.floor(Math.random() * icons.length)];
-  }, []); // Runs only when `title` changes (each song gets its own icon)
+  }, []);
 
   return <DisplaySong title={title} artists={artists} thumbnail={thumbnail} icon={icon} />;
 };
