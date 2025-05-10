@@ -123,15 +123,18 @@ func uniqueArtists(input []string) []string {
 
 func normalizeArtists(artists *[]string) {
 	feat := regexp.MustCompile(`(?i)\(?\s*(feat\.?|ft\.?)\s+([^)]+)\)?`)
+	brackets := regexp.MustCompile(`\s*(\([^()]*\)|\[[^\[\]]*\])`)
 	var cleaned []string
 
 	for _, artist := range *artists {
+		// Step 1: Remove bracketed content
+		artist = brackets.ReplaceAllString(artist, "")
 		artist = strings.TrimSpace(artist)
+
+		// Step 2: Extract featured artists
 		match := feat.FindStringSubmatch(artist)
 		if len(match) > 2 {
-			// Extract featured artists
 			featured := extractArtistNames(match[2])
-			// Remove feat part from main artist
 			cleanMain := feat.ReplaceAllString(artist, "")
 			cleaned = append(cleaned, strings.TrimSpace(cleanMain))
 			cleaned = append(cleaned, featured...)
