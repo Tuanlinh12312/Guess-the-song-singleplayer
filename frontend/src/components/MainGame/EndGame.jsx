@@ -23,8 +23,7 @@ const EndGame = ({
 
   const grade = (() => {
     const maxScore = totalTitles * 200 + totalArtists * 100;
-    const percent = score / maxScore + 0.1 * diff;
-    return "S";
+    const percent = score / maxScore - 0.1 * diff;
     if (percent >= 0.7) return "S";
     if (percent >= 0.65) return "A+";
     if (percent >= 0.6) return "A";

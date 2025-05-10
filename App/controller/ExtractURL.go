@@ -73,7 +73,7 @@ func fixTitle(title *string, artists *[]string) {
 	}
 
 	// Step 4: Remove common suffixes like remix, version, ver., etc.
-	suffixes := regexp.MustCompile(`(?i)\b(remix|live|edit|explicit|clean|original mix|ver\.?|version|piano version|acoustic)\b`)
+	suffixes := regexp.MustCompile(`(?i)\b(remix|live|edit|explicit|clean|original mix|ver\.?|version|piano cover|acoustic|official mv)\b`)
 	cleanTitle = suffixes.ReplaceAllString(cleanTitle, "")
 	cleanTitle = strings.TrimSpace(cleanTitle)
 
@@ -81,7 +81,7 @@ func fixTitle(title *string, artists *[]string) {
 	cleanTitle = regexp.MustCompile(`(?i)\s+x\s+`).ReplaceAllString(cleanTitle, " | ")
 
 	// Step 5: Split by non-letter, non-whitespace (preserving accents and words)
-	splitRegex := regexp.MustCompile(`[^\p{L}\p{Zs}]+`)
+	splitRegex := regexp.MustCompile(`[^\p{L}\p{N}\p{Zs}]+`)
 	parts := splitRegex.Split(cleanTitle, -1)
 
 	if len(parts) <= 1 {
