@@ -26,11 +26,11 @@ func main() {
 	router.POST("/NextRound", controller.NextRound)
 
 	// Serve React static files (handle them under the '/static' prefix)
-	router.Static("/static", "./build")
+	router.Static("/static", "../frontend/build/static")
 
 	// Handle React client-side routes for undefined paths (serving index.html)
 	router.NoRoute(func(c *gin.Context) {
-		c.File("./build/index.html")
+		c.File("../frontend/build/index.html")
 	})
 
 	// Use PORT from environment or default to 8080
