@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"App/database"
+	"backend/database"
 
 	"fmt"
 	"regexp"
@@ -19,19 +19,6 @@ func extractVideoID(url string) (string, error) {
 		return matches[1], nil
 	}
 	return "", fmt.Errorf("invalid URL")
-}
-
-func uniqueArtists(input []string) []string {
-	seen := map[string]bool{}
-	var result []string
-	for _, artist := range input {
-		key := strings.ToLower(strings.TrimSpace(artist))
-		if key != "" && !seen[key] {
-			seen[key] = true
-			result = append(result, artist)
-		}
-	}
-	return result
 }
 
 func fixTitle(title *string, artists *[]string) {
@@ -81,16 +68,10 @@ func fixTitle(title *string, artists *[]string) {
 	cleanTitle = regexp.MustCompile(`(?i)\s+x\s+`).ReplaceAllString(cleanTitle, " | ")
 
 	// Step 5: Split by non-letter, non-whitespace (preserving accents and words)
-	splitRegex := regexp.MustCompile(`[^\p{L}\p{N}\p{Zs}]+`)
+	splitRegex := regexp.MustCompile(`\s[^\p{L}\p{N}\p{Zs}]\s`)
 	parts := splitRegex.Split(cleanTitle, -1)
 
-	if len(parts) <= 1 {
-		*title = cleanTitle
-		*artists = uniqueArtists(*artists)
-		return
-	}
-
-	// Find longest part => assume it's the title
+	// assume longest part is title
 	longestIdx := 0
 	maxLen := len(parts[0])
 	for i, part := range parts {
@@ -112,7 +93,54 @@ func fixTitle(title *string, artists *[]string) {
 	}
 
 	*title = finalTitle
-	*artists = uniqueArtists(append(*artists, newArtists...))
+}
+
+func extractArtistNames(s string) []string {
+	separator := regexp.MustCompile(`\s*(,|&|and|\||(?i)\s+x\s+)\s*`)
+	parts := separator.Split(s, -1)
+	var result []string
+	for _, part := range parts {
+		part = strings.Trim(part, "@! ")
+		if part != "" {
+			result = append(result, part)
+		}
+	}
+	return result
+}
+
+func uniqueArtists(input []string) []string {
+	seen := map[string]bool{}
+	var result []string
+	for _, name := range input {
+		key := strings.ToLower(strings.TrimSpace(name))
+		if key != "" && !seen[key] {
+			seen[key] = true
+			result = append(result, name)
+		}
+	}
+	return result
+}
+
+func normalizeArtists(artists *[]string) {
+	feat := regexp.MustCompile(`(?i)\(?\s*(feat\.?|ft\.?)\s+([^)]+)\)?`)
+	var cleaned []string
+
+	for _, artist := range *artists {
+		artist = strings.TrimSpace(artist)
+		match := feat.FindStringSubmatch(artist)
+		if len(match) > 2 {
+			// Extract featured artists
+			featured := extractArtistNames(match[2])
+			// Remove feat part from main artist
+			cleanMain := feat.ReplaceAllString(artist, "")
+			cleaned = append(cleaned, strings.TrimSpace(cleanMain))
+			cleaned = append(cleaned, featured...)
+		} else {
+			cleaned = append(cleaned, artist)
+		}
+	}
+
+	*artists = uniqueArtists(cleaned)
 }
 
 func extractSongInfo(t *ytmusic.TrackItem) database.Song {
@@ -124,6 +152,7 @@ func extractSongInfo(t *ytmusic.TrackItem) database.Song {
 		song.Artists = append(song.Artists, artist.Name)
 	}
 	fixTitle(&song.Title, &song.Artists)
+	normalizeArtists(&song.Artists)
 
 	song.Thumbnail = t.Thumbnails[0].URL
 	song.Start = 0

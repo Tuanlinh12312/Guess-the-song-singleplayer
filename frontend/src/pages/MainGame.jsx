@@ -25,13 +25,11 @@ const MainGame = () => {
   const [artistsGuessed, setArtists] = useState(0);
   const [roundEnded, setRoundEnded] = useState(false);
 
-  // Statistics
   const [diff, setDiff] = useState(0);
   const [totalTitles, setTotalTitles] = useState(0);
   const [totalTitleGuessed, setTotalTitleGuessed] = useState(0);
   const [totalArtists, setTotalArtists] = useState(0);
   const [totalArtistsGuessed, setTotalArtistsGuessed] = useState(0);
-
   const [perfectRounds, setPerfectRounds] = useState(0);
   const [roundScores, setRoundScores] = useState([]);
   const [currentScore, setCurrentScore] = useState(0);
@@ -79,13 +77,13 @@ const MainGame = () => {
         setCurrentScore((prev) => prev + adjustedPoints);
 
         if (correctArtist) {
-          setArtists((cnt) => cnt + 1); // per-round count
-          setTotalArtistsGuessed((cnt) => cnt + 1); // total count
+          setArtists((cnt) => cnt + 1);
+          setTotalArtistsGuessed((cnt) => cnt + 1); 
         }
 
         if (correctTitle) {
-          setTitle((cnt) => cnt + 1); // round-local flag
-          setTotalTitleGuessed((cnt) => cnt + 1); // cumulative stat
+          setTitle((cnt) => cnt + 1); 
+          setTotalTitleGuessed((cnt) => cnt + 1);
         }
       }
 

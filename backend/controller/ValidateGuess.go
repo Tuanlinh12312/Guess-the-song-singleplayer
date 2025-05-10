@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"App/database"
+	"backend/database"
 	"net/http"
 
 	"regexp"

@@ -1,15 +1,15 @@
 package controller
 
 import (
-	"App/database"
+	"backend/database"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateRound(c *gin.Context) {
+func UpdateTime(c *gin.Context) {
 	var req struct {
-		Round int `json:"round"`
+		Time int `json:"time"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -17,9 +17,9 @@ func UpdateRound(c *gin.Context) {
 		return
 	}
 
-	database.Round = req.Round
+	database.Time = req.Time;
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Set round!",
-		"count":   req.Round,
+		"time":   req.Time,
 	})
 }
