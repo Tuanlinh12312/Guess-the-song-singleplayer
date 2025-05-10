@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: guess-the-song
+    env: go
+    rootDir: backend
+
+    buildCommand: |
+      cd ../frontend
+      npm install
+      npm run build
+      cd ../backend
+      go build -o app
+
+    startCommand: ./app
+
+    envVars:
+      - key: GIN_MODE
+        value: release
