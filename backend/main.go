@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/controller"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,8 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(cors.Default())
+
+	// API routes (define them first to avoid conflict with static routes)
 	router.POST("/UploadSong", controller.UploadSong)
 	router.POST("/UpdateRound", controller.UpdateRound)
 	router.PATCH("/UpdateTime", controller.UpdateTime)
@@ -21,5 +24,19 @@ func main() {
 	router.POST("/Guess", controller.ValidateGuess)
 	router.GET("/Status", controller.GetStatus)
 	router.POST("/NextRound", controller.NextRound)
-	router.Run("localhost:8080")
+
+	// Serve React static files (handle them under the '/static' prefix)
+	router.Static("/static", "./build")
+
+	// Handle React client-side routes for undefined paths (serving index.html)
+	router.NoRoute(func(c *gin.Context) {
+		c.File("./build/index.html")
+	})
+
+	// Use PORT from environment or default to 8080
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	router.Run(":" + port)
 }

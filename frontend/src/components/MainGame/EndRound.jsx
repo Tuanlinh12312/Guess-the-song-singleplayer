@@ -32,7 +32,7 @@ const EndRound = ({ song, onNextRound }) => {
               {song.title}
             </div>
             <div className="text-sm text-gray-700">
-              {song.artists.join(", ")}
+              {song?.artists?.join(", ")}
             </div>
             <img
               src={icon}

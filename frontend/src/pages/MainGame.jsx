@@ -24,7 +24,6 @@ const MainGame = () => {
   const [titleGuessed, setTitle] = useState(0);
   const [artistsGuessed, setArtists] = useState(0);
   const [roundEnded, setRoundEnded] = useState(false);
-
   const [diff, setDiff] = useState(0);
   const [totalTitles, setTotalTitles] = useState(0);
   const [totalTitleGuessed, setTotalTitleGuessed] = useState(0);
@@ -46,8 +45,8 @@ const MainGame = () => {
         setTimeCap(response.data.time);
         setTimeLeft(response.data.time);
 
-        if (timeCap == 60) setDiff(1);
-        if (timeCap == 90) setDiff(2);
+        if (response.data.time === 60) setDiff(1);
+        if (response.data.time === 90) setDiff(2);
       }
     } catch (error) {
       console.error("Error fetching game status:", error);
@@ -78,11 +77,11 @@ const MainGame = () => {
 
         if (correctArtist) {
           setArtists((cnt) => cnt + 1);
-          setTotalArtistsGuessed((cnt) => cnt + 1); 
+          setTotalArtistsGuessed((cnt) => cnt + 1);
         }
 
         if (correctTitle) {
-          setTitle((cnt) => cnt + 1); 
+          setTitle((cnt) => cnt + 1);
           setTotalTitleGuessed((cnt) => cnt + 1);
         }
       }
@@ -113,7 +112,10 @@ const MainGame = () => {
       setArtists(0);
       setRoundEnded(false);
       setIsPlaying(false);
-      setRoundScores((prev) => [...prev, { round, score: currentScore, song, totalScore: (song.artists?.length || 0)*100+200 }]);
+      setRoundScores((prev) => [
+        ...prev,
+        { round, score: currentScore, song, totalScore: (song.artists?.length || 0) * 100 + 200 },
+      ]);
       setCurrentScore(0);
       await fetchGameStatus();
     } catch (err) {
@@ -190,9 +192,7 @@ const MainGame = () => {
               </div>
             </div>
 
-            <div
-              className="flex flex-row"
-              style={{ height: "calc(100vh - 180px)" }}>
+            <div className="flex flex-row" style={{ height: "calc(100vh - 180px)" }}>
               <div className="flex flex-col ml-10 mt-3 w-1/6 mr-3">
                 <Score score={score} />
                 <GuessChecklist

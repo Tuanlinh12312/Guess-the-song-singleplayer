@@ -6,10 +6,14 @@ import SongList from "../components/GameSetup/SongList";
 import StartGameButton from "../components/GameSetup/StartGameButton";
 import GuessTime from "../components/GameSetup/GuessTime";
 
+// Set up base URL for API calls
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+
 const GameSetup = () => {
   const [rounds, setRounds] = useState(0);
   const [songs, setSongs] = useState([]);
   const [time, setTime] = useState(0);
+  const [errorMessage, setErrorMessage] = useState(null); // For error messages
 
   const handleAddSong = async (url, cnt) => {
     const isDuplicate = (newSong) =>
@@ -44,18 +48,13 @@ const GameSetup = () => {
       if (cnt === -1) {
         // Single song
         console.log("Fetching single song:", url);
-        const response = await axios.post(
-          "http://localhost:8080/GetNameArtist",
-          { url }
-        );
+        const response = await axios.post(`${API_URL}/GetNameArtist`, { url });
         console.log("Fetched song:", response.data.song);
         addUniqueSongs([response.data.song]);
       } else if (cnt === -2) {
         // Playlist
         console.log("Fetching playlist from:", url);
-        const response = await axios.post("http://localhost:8080/GetPlaylist", {
-          url,
-        });
+        const response = await axios.post(`${API_URL}/GetPlaylist`, { url });
         const list = response.data.playlist;
         if (Array.isArray(list)) {
           console.log("Fetched playlist:", list);
@@ -64,10 +63,10 @@ const GameSetup = () => {
       } else {
         // Watchlist
         console.log(`Fetching ${cnt} suggested songs from:`, url);
-        const response = await axios.post(
-          "http://localhost:8080/GetWatchlist",
-          { url, cnt }
-        );
+        const response = await axios.post(`${API_URL}/GetWatchlist`, {
+          url,
+          cnt,
+        });
         const list = response.data.watchlist;
         if (Array.isArray(list)) {
           console.log("Fetched watchlist:", list);
@@ -76,6 +75,7 @@ const GameSetup = () => {
       }
     } catch (err) {
       console.error("Error fetching songs:", err);
+      setErrorMessage(err.response?.data?.error || "Something went wrong while fetching songs.");
     }
   };
 
@@ -110,13 +110,18 @@ const GameSetup = () => {
                   Your Song
                 </h3>
                 <SongInput onAddSong={handleAddSong} />
-                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
+                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_ black] mb-2">
                   Guess Time
                 </h3>
                 <GuessTime onSetTime={setTime} />
               </div>
             </div>
           </div>
+          {errorMessage && (
+            <div className="text-red-500 text-center mb-4">
+              <strong>Error:</strong> {errorMessage}
+            </div>
+          )}
           <h3 className="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black]">
             Now Playing
           </h3>
