@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // 🔄 Shared axios instance
+import api from "../../api";
 
 const StartGameButton = ({ rounds, songs, time }) => {
   const [loading, setLoading] = useState(false);
