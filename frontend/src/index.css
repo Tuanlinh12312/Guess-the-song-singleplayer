@@ -3,51 +3,191 @@
 @tailwind utilities;
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 .bg-image {
-  background-image: url('/public/images/background.png');
+  background-image: url("/public/images/background.png");
 }
 
 .bg-b1 {
-  background-image: url('/public/images/b1.png');
+  background-image: url("/public/images/b1.png");
 }
 
+.bg-chat {
+  background-image: url("/public/images/bg-chat.png");
+  background-size: 600px;
+}
+
+.bg-score {
+  background-image: url("/public/images/score.png");
+}
+
+.bg-type {
+  background-image: url("/public/images/bg-type.png");
+}
+
+.bg-history {
+  background-image: url("/public/images/bg-history.png");
+}
+
+.bg-nextround {
+  background-image: url("/public/images/nextround.png");
+}
+
+.glowS {
+  font-weight: bold;
+  background: linear-gradient(
+    270deg,
+    #ff0000,
+    #ff9900,
+    #ffee00,
+    #33ff00,
+    #00ffee,
+    #3300ff,
+    #cc00ff,
+    #ff0000
+  );
+  background-size: 200% 200%;
+  animation: rainbowShift 4s linear infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
+    0 0 10px rgba(255, 255, 255, 0.4), 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes rainbowShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes confetti-up {
+  0% {
+    transform: translateY(100vh) scale(1);
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(-85vh) scale(1.5);
+  }
+  100% {
+    transform: translateY(-100vh) scale(1.7);
+    opacity: 0;
+  }
+}
+
+.confetti-up {
+  animation: confetti-up linear forwards;
+}
+
+@keyframes confetti-up-a {
+  0% {
+    transform: translateY(0) rotate(0deg); /* Start from the bottom */
+    opacity: 1;
+  }
+  40% {
+    transform: translateY(-30vh) rotate(30deg); /* Fly upwards with slight rotation */
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50vh) rotate(90deg); /* Bump in the middle (slight upward bounce) */
+    opacity: 0.8;
+  }
+  60% {
+    transform: translateY(-70vh) rotate(180deg); /* Continue upwards */
+    opacity: 0.7;
+  }
+  80% {
+    transform: translateY(-85vh) rotate(270deg); /* Finish movement */
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg); /* End position */
+    opacity: 0;
+  }
+}
+
+.confetti-up-a {
+  animation: confetti-up-s linear forwards;
+}
+
+.glowA {
+  color: #4caf50;
+}
+
+.glowB {
+  color: #f0c419;
+}
+
+.glowC {
+  color: #ffbb00;
+}
+
+.glowD {
+  color: #f47f36;
+}
+
+.glowF {
+  color: #d32f2f;
+}
 
 @font-face {
-  font-family: 'Metal Mania';
-  src: url('/public/fonts/MetalMania-Regular.ttf') format('ttf');
+  font-family: "Metal Mania";
+  src: url("/public/fonts/MetalMania-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Darumadrop One';
-  src: url('/public/fonts/DarumadropOne-Regular.ttf') format('ttf');
+  font-family: "Darumadrop One";
+  src: url("/public/fonts/DarumadropOne-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'EB Garamond';
-  src: url('/public/fonts/EBGaramond-VariableFont_wght.ttf') format('ttf');
+  font-family: "EB Garamond";
+  src: url("/public/fonts/EBGaramond-VariableFont_wght.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Roboto';
-  src: url('/public/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf') format('ttf');
+  font-family: "Roboto";
+  src: url("/public/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Coiny";
+  src: url("/public/fonts/Coiny.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

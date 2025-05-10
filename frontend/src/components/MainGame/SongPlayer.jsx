@@ -1,8 +1,9 @@
 import YouTube from "react-youtube";
 import { useEffect, useRef } from "react";
 
-const SongPlayer = ({ song }) => {
+const SongPlayer = ({ song, onPlay, roundEnded }) => {
   const playerRef = useRef(null);
+  const isReadyRef = useRef(false);
 
   const extractVideoID = (url) => {
     try {
@@ -16,8 +17,8 @@ const SongPlayer = ({ song }) => {
   const videoId = extractVideoID(song.url);
 
   const opts = {
-    height: "200", // can be visually hidden with CSS later
-    width: "300",
+    height: "0",
+    width: "0",
     playerVars: {
       autoplay: 1,
       controls: 0,
@@ -26,33 +27,32 @@ const SongPlayer = ({ song }) => {
     },
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const player = playerRef.current;
-      if (player && typeof player.getCurrentTime === "function") {
-        const time = player.getCurrentTime();
-        if (time >= song.End) {
-          player.pauseVideo();
-        }
-      }
-    }, 500);
-    return () => clearInterval(interval);
-  }, [song]);
+  const handleStateChange = (event) => {
+    // 1 = playing
+    if (event.data === 1 && typeof onPlay === "function") {
+      onPlay();
+    }
+  };
+
+  const handleReady = (event) => {
+    playerRef.current = event.target;
+    isReadyRef.current = true;
+    try {
+      event.target.setVolume(100);
+    } catch (err) {
+      console.warn("Failed to set volume:", err);
+    }
+  };
+
+  if (roundEnded || !videoId) return null;
 
   return (
-    <div className="invisible"> {/* hide the player visually */}
-    <h1>
-      {opts.playerVars.start}
-      {videoId}
-    </h1>
+    <div className="invisible">
       <YouTube
         videoId={videoId}
         opts={opts}
-        onReady={(event) => {
-          playerRef.current = event.target;
-          event.target.setVolume(100);
-          // event.target.mute(); // Mute to allow autoplay
-        }}
+        onReady={handleReady}
+        onStateChange={handleStateChange}
       />
     </div>
   );

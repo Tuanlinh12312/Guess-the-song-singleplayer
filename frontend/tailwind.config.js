@@ -31,6 +31,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        coiny: ['Coiny', 'cursive'],
         Roboto: ['Roboto', 'cursive'],
         EBGaramond: ['EB Garamond', 'cursive'],
         darumadrop: ['Darumadrop One', 'cursive'],
@@ -40,5 +41,4 @@ module.exports = {
   },
   plugins: [],
 }
-
 

@@ -1,28 +1,56 @@
 import { useState } from "react";
 
 const SongInput = ({ onAddSong }) => {
-  const [songUrl, setSongUrl] = useState("");
-
-  const handleChange = (e) => {
-    setSongUrl(e.target.value);
-  };
+  const [url, setUrl] = useState("");
+  const [mode, setMode] = useState("single"); // 'single', 'suggested', or 'playlist'
+  const [count, setCount] = useState(10);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (songUrl.trim() === "") return;
-    onAddSong(songUrl);
-    setSongUrl(""); // Clear input after adding
+    if (url.trim() === "") return;
+
+    const cnt = mode === "single" ? -1 : (mode === "playlist" ? -2 : count);
+    onAddSong(url, cnt);
+    setUrl("");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col sm:flex-row gap-2 w-full"
+    >
       <input
+        name="url"
         type="text"
-        placeholder="Enter song URL"
-        value={songUrl}
-        onChange={handleChange}
-        class="border border-gray-300 rounded pl-3 py-1 w-full"
+        placeholder="Enter YouTube Music URL"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        className="border border-gray-300 rounded px-3 py-1 flex-1 w-3/4 font-EBGaramond"
       />
+
+      <select
+        value={mode}
+        onChange={(e) => setMode(e.target.value)}
+        className="border border-gray-300 rounded px-2 py-1 w-1/4 font-EBGaramond"
+      >
+        <option value="single">Add Single</option>
+        <option value="suggested">Add Suggestions</option>
+        <option value="playlist">Add Playlist</option>
+      </select>
+
+      {mode === "suggested" && (
+        <input
+          name="count"
+          type="number"
+          min="1"
+          value={count}
+          onChange={(e) => setCount(parseInt(e.target.value))}
+          className="border border-gray-300 rounded px-2 py-1 w-14 font-EBGaramond text-center"
+          placeholder="Count"
+        />
+      )}
+
+      <button type="submit" className="hidden" />
     </form>
   );
 };

@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7f7d646f.css",
+    "main.js": "/static/js/main.a7899149.js",
+    "static/js/488.e75445ad.chunk.js": "/static/js/488.e75445ad.chunk.js",
+    "static/media/EBGaramond-VariableFont_wght.ttf": "/static/media/EBGaramond-VariableFont_wght.815805779a78df014494.ttf",
+    "static/media/Roboto-Italic-VariableFont_wdth,wght.ttf": "/static/media/Roboto-Italic-VariableFont_wdth,wght.a98692b7f24435150ede.ttf",
+    "static/media/DarumadropOne-Regular.ttf": "/static/media/DarumadropOne-Regular.567ab9e55394ef139215.ttf",
+    "static/media/MetalMania-Regular.ttf": "/static/media/MetalMania-Regular.3b5d2a882c4cfbed7ba5.ttf",
+    "static/media/Coiny.ttf": "/static/media/Coiny.61e71214a606a6502029.ttf",
+    "static/media/nextround.png": "/static/media/nextround.7f33fd7328fb2918646f.png",
+    "static/media/score.png": "/static/media/score.61d6f9485d28568bf24b.png",
+    "static/media/bg-chat.png": "/static/media/bg-chat.c9070ead2d94085dd54a.png",
+    "index.html": "/index.html",
+    "main.7f7d646f.css.map": "/static/css/main.7f7d646f.css.map",
+    "main.a7899149.js.map": "/static/js/main.a7899149.js.map",
+    "488.e75445ad.chunk.js.map": "/static/js/488.e75445ad.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7f7d646f.css",
+    "static/js/main.a7899149.js"
+  ]
+}
