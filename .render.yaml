@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: my-app
+    plan: free
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    repo: https://github.com/your-username/your-repo
+    branch: main
+
+    buildCommand: |
+      cd ../frontend
+      npm install
+      npm run build
+      cd ../backend
+      go build -o app
+
+    startCommand: ./app
+
+    envVars:
+      - key: GIN_MODE
+        value: release
