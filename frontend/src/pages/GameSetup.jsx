@@ -48,6 +48,7 @@ const GameSetup = () => {
       if (cnt === -1) {
         // Single song
         console.log("Fetching single song:", url);
+        console.log("API:", API_URL, "/GetNameArtist");
         const response = await axios.post(`${API_URL}/GetNameArtist`, { url });
         console.log("Fetched song:", response.data.song);
         addUniqueSongs([response.data.song]);
