@@ -1,19 +1,16 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api"; // 🔄 Use shared axios instance
 import RoundInput from "../components/GameSetup/RoundInput";
 import SongInput from "../components/GameSetup/SongInput";
 import SongList from "../components/GameSetup/SongList";
 import StartGameButton from "../components/GameSetup/StartGameButton";
 import GuessTime from "../components/GameSetup/GuessTime";
 
-// Set up base URL for API calls
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
-
 const GameSetup = () => {
   const [rounds, setRounds] = useState(0);
   const [songs, setSongs] = useState([]);
   const [time, setTime] = useState(0);
-  const [errorMessage, setErrorMessage] = useState(null); // For error messages
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleAddSong = async (url, cnt) => {
     const isDuplicate = (newSong) =>
@@ -33,9 +30,7 @@ const GameSetup = () => {
 
       if (duplicates > 0) {
         alert(
-          `${duplicates} duplicate song${
-            duplicates > 1 ? "s" : ""
-          } were skipped.`
+          `${duplicates} duplicate song${duplicates > 1 ? "s" : ""} were skipped.`
         );
       }
 
@@ -46,37 +41,29 @@ const GameSetup = () => {
 
     try {
       if (cnt === -1) {
-        // Single song
-        console.log("Fetching single song:", url);
-        console.log("API:", API_URL, "/GetNameArtist");
-        const response = await axios.post(`${API_URL}/GetNameArtist`, { url });
-        console.log("Fetched song:", response.data.song);
+        const response = await api.post("/GetNameArtist", { url });
         addUniqueSongs([response.data.song]);
       } else if (cnt === -2) {
-        // Playlist
-        console.log("Fetching playlist from:", url);
-        const response = await axios.post(`${API_URL}/GetPlaylist`, { url });
+        const response = await api.post("/GetPlaylist", { url });
         const list = response.data.playlist;
         if (Array.isArray(list)) {
-          console.log("Fetched playlist:", list);
           addUniqueSongs(list);
         }
       } else {
-        // Watchlist
-        console.log(`Fetching ${cnt} suggested songs from:`, url);
-        const response = await axios.post(`${API_URL}/GetWatchlist`, {
+        const response = await api.post("/GetWatchlist", {
           url,
           cnt,
         });
         const list = response.data.watchlist;
         if (Array.isArray(list)) {
-          console.log("Fetched watchlist:", list);
           addUniqueSongs(list);
         }
       }
     } catch (err) {
       console.error("Error fetching songs:", err);
-      setErrorMessage(err.response?.data?.error || "Something went wrong while fetching songs.");
+      setErrorMessage(
+        err.response?.data?.error || "Something went wrong while fetching songs."
+      );
     }
   };
 
@@ -111,7 +98,7 @@ const GameSetup = () => {
                   Your Song
                 </h3>
                 <SongInput onAddSong={handleAddSong} />
-                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_ black] mb-2">
+                <h3 className="text-center font-bold text-3xl mt-2 font-EBGaramond text-white drop-shadow-[2px_1px_0px_black] mb-2">
                   Guess Time
                 </h3>
                 <GuessTime onSetTime={setTime} />

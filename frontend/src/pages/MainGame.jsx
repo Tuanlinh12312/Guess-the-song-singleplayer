@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import SongPlayer from "../components/MainGame/SongPlayer";
 import RoundCount from "../components/MainGame/RoundCount";
 import RoundTimer from "../components/MainGame/RoundTimer";
@@ -35,7 +35,7 @@ const MainGame = () => {
 
   const fetchGameStatus = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/Status");
+      const response = await api.get("/Status");
       if (response.data.gameover) {
         setGameOver(true);
         setSong(null);
@@ -55,7 +55,7 @@ const MainGame = () => {
 
   const handleGuess = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/Guess", {
+      const response = await api.post("/Guess", {
         guess: guess,
       });
 
@@ -102,7 +102,7 @@ const MainGame = () => {
 
   const goToNextRound = async () => {
     try {
-      await axios.post("http://localhost:8080/NextRound");
+      await api.post("/NextRound");
       if (titleGuessed && artistsGuessed === (song?.artists?.length || 0)) {
         setPerfectRounds((cnt) => cnt + 1);
       }

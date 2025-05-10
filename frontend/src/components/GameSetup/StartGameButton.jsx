@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-// Set up base URL for API calls
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+import api from "../api"; // 🔄 Shared axios instance
 
 const StartGameButton = ({ rounds, songs, time }) => {
   const [loading, setLoading] = useState(false);
@@ -11,7 +8,6 @@ const StartGameButton = ({ rounds, songs, time }) => {
   const navigate = useNavigate();
 
   const handleStartGame = async () => {
-    // Validation
     if (rounds <= 0 || rounds > songs.length) {
       alert("Invalid number of rounds");
       return;
@@ -26,32 +22,20 @@ const StartGameButton = ({ rounds, songs, time }) => {
     }
 
     setLoading(true);
-    setErrorMessage(null); // Reset any previous error message
+    setErrorMessage(null);
 
     try {
-      // Upload songs
-      const responseSongs = await axios.post(`${API_URL}/UploadSong`, songs);
-      console.log(responseSongs.data.message);
+      await api.post("/UploadSong", songs);
+      await api.patch("/UpdateTime", { time });
+      await api.post("/UpdateRound", { round: rounds });
+      await api.put("/StartGame");
 
-      // Update time limit
-      const responseTime = await axios.patch(`${API_URL}/UpdateTime`, { time });
-      console.log(responseTime.data.message);
-
-      // Update rounds
-      const responseRounds = await axios.post(`${API_URL}/UpdateRound`, { round: rounds });
-      console.log(responseRounds.data.message);
-
-      // Start the game
-      const responseStart = await axios.put(`${API_URL}/StartGame`);
-      console.log(responseStart.data.message);
-
-      // Navigate to the game page
       navigate("/game");
     } catch (err) {
-      console.log(`Error: ${err.response?.data?.error || "Something went wrong"}`);
+      console.error("Error starting game:", err);
       setErrorMessage(err.response?.data?.error || "Something went wrong");
     } finally {
-      setLoading(false); // Set loading to false once the process is finished
+      setLoading(false);
     }
   };
 
