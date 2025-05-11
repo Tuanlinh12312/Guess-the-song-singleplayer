@@ -31,17 +31,10 @@ const SongList = ({ songs, onDeleteSong }) => {
                 thumbnail={song.thumbnail}
               />
               <div className="flex flex-col h-16 items-center">
-                <div className="flex flex-col items-start justify-center h-16">
+                <div className="flex flex-col items-start justify-start mt-2 h-16">
                   <button onClick={() => onDeleteSong(index)}>
                     <img src="/images/xicon.png" alt="delete" className="h-4 w-4" />
                   </button>
-                </div>
-                <div className="flex items-end justify-center mt-5">
-                  <img
-                    src="/images/listsongplay.png"
-                    alt="play"
-                    className="h-7 w-7"
-                  />
                 </div>
               </div>
             </div>

@@ -31,7 +31,7 @@ const DisplaySong = ({ title, artists, thumbnail, icon }) => {
           src={thumbnail}
           alt={`${title} thumbnail`}
           className="w-16 h-16 rounded-lg object-cover"
-          onError={(e) => (e.target.src = "/images/pod18397-1.jpg")} // Fallback image URL
+          onError={(e) => (e.target.src = "/images/pod18397-1.jpg")} 
         />
       )}
       <div className="flex-1 flex flex-col ml-2">
@@ -42,12 +42,11 @@ const DisplaySong = ({ title, artists, thumbnail, icon }) => {
         <img
           src={icon}
           alt="Icon"
-          className="w-[calc(100%-20px)] mt-2 rounded-full"
+          className="w-full mt-2 rounded-full"
         />
       </div>
     </div>
   );
 };
 
-// Only one default export (SongItem)
 export default SongItem;

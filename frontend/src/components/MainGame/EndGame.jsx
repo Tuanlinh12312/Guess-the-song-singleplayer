@@ -343,14 +343,7 @@ const EndGame = ({
                   <img
                     src={icon}
                     alt="Icon"
-                    className="w-[calc(100%-20px)] mt-2 rounded-full"
-                  />
-                </div>
-                <div className="flex items-end justify-center mt-12">
-                  <img
-                    src="/images/listsongplay.png"
-                    alt="play"
-                    className="h-7 w-7"
+                    className="w-full mt-2 rounded-full"
                   />
                 </div>
               </div>
