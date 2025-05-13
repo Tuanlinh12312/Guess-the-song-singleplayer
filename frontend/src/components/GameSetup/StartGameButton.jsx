@@ -42,15 +42,15 @@ const StartGameButton = ({ round, songs, time }) => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center ml-auto">
-      <div className="flex flex-col items-center mt-7">
+    <div className="flex flex-col justify-start items-center w-full">
+      <div className="flex flex-col items-center mt-7 w-full">
         {errorMessage && (
           <div className="text-red-500 mb-4">
             <strong>Error:</strong> {errorMessage}
           </div>
         )}
         <button
-          className="flex justify-center items-center mt-3"
+          className="relative flex justify-center items-center mt-3 w-full max-w-[300px]"
           onClick={handleStartGame}
           disabled={loading}
         >

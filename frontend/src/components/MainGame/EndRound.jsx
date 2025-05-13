@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+
 const EndRound = ({ song, onNextRound }) => {
   const icon = useMemo(() => {
     const icons = [
@@ -11,11 +12,12 @@ const EndRound = ({ song, onNextRound }) => {
 
     return icons[Math.floor(Math.random() * icons.length)];
   }, []);
+
   if (!song) return null;
 
   return (
-    <div className="flex flex-col items-center h-full w-full justify-center backdrop-blur-lg">
-      <div className="bg-cover bg-fixed bg-b1 bg-no-repeat w-1/2 h-[calc(50%-40px)] flex flex-col items-center rounded-3xl">
+    <div className="flex flex-col items-center justify-center h-screen w-full backdrop-blur-lg">
+      <div className="bg-cover bg-fixed bg-b1 bg-no-repeat w-[50%] h-[calc(50%-40px)] flex flex-col items-center rounded-3xl">
         <h1 className="text-5xl font-coiny font-bold tracking-wide text-center w-full drop-shadow-[3px_3px_0px_white] text-orange-950 mt-6">
           Round Ended
         </h1>
@@ -46,7 +48,8 @@ const EndRound = ({ song, onNextRound }) => {
         <div className="flex flex-col justify-start items-center h-full w-full">
           <button
             className="flex justify-center items-center mt-3 relative w-52 h-32"
-            onClick={onNextRound}>
+            onClick={onNextRound}
+          >
             <img
               src="/images/icon1.png"
               alt="background"

@@ -15,14 +15,12 @@ const SongList = ({ songs, onDeleteSong }) => {
   return (
     <div
       ref={scrollRef}
-      className="flex justify-start mt-10 items-start rounded-3xl overflow-y-auto overflow-x-hidden bg-amber-900/10 mr-auto ml-10 pt-10 w-[calc(50%-60px)] h-[calc(100%-35px)] scrollbar-hide"
-    >
-      <ul className="w-full">
+      className="flex justify-start items-start mt-10 rounded-3xl overflow-y-auto overflow-x-hidden bg-amber-900/10 pt-10 ml-10 mr-auto w-[calc(50%-60px)] h-[calc(100%-35px)] scrollbar-hide">
+      <ul className="w-full px-10">
         {songs.map((song, index) => (
           <li
             key={index}
-            className="relative w-[calc(100%-80px)] mr-10 ml-10 overflow-hidden flex items-center p-4 rounded-3xl mb-3"
-          >
+            className="relative w-full flex items-center p-4 rounded-3xl mb-3 overflow-hidden">
             <div className="absolute inset-0 bg-white opacity-50 rounded-3xl"></div>
             <div className="relative flex items-center gap-4 w-full justify-between">
               <DisplaySong
@@ -30,10 +28,14 @@ const SongList = ({ songs, onDeleteSong }) => {
                 artists={song.artists}
                 thumbnail={song.thumbnail}
               />
-              <div className="flex flex-col h-16 items-center">
-                <div className="flex flex-col items-start justify-start mt-2 h-16">
-                  <button onClick={() => onDeleteSong(index)}>
-                    <img src="/images/xicon.png" alt="delete" className="h-4 w-4" />
+              <div className="h-16">
+                <div className=" w-full h-full flex items-start justify-start">
+                  <button
+                    onClick={() => onDeleteSong(index)}
+                    className="p-0 -mt-1">
+                    <span className="font-coiny text-3xl leading-none">
+                      x
+                    </span>
                   </button>
                 </div>
               </div>

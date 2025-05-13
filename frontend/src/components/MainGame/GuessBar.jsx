@@ -10,7 +10,6 @@ const GuessBar = ({
 }) => {
   const chatContainerRef = useRef(null);
 
-  // Always scroll to the bottom on guessHistory update
   useEffect(() => {
     const container = chatContainerRef.current;
     if (container) {
@@ -28,15 +27,14 @@ const GuessBar = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="h-full w-full bg-chat bg-no-repeat bg-center overflow-hidden"
+      className="h-full w-full bg-chat bg-no-repeat bg-center bg-contain overflow-hidden"
     >
-      {/* Chat history */}
       <div
         ref={chatContainerRef}
-        className="p-3 rounded-md overflow-y-auto overflow-x-hidden h-[calc(100%-70px)]"
+        className="p-3 overflow-y-auto overflow-x-hidden h-[calc(100%-70px)]"
         style={{
-          scrollbarWidth: "none", // Firefox
-          msOverflowStyle: "none", // IE and Edge
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
       >
         {guessHistory.map((entry, idx) => (
@@ -57,11 +55,10 @@ const GuessBar = ({
         ))}
       </div>
 
-      {/* Input area */}
-      <div className="flex flex-row mt-3">
+      <div className="flex flex-row mt-3 px-5">
         <input
           type="text"
-          className={`p-2 rounded-2xl text-black w-[calc(100%-90px)] h-10 font-EBGaramond placeholder-black px-4 py-1 ml-5 bg-type ${
+          className={`rounded-2xl text-black font-EBGaramond placeholder-black px-4 py-2 bg-type text-lg w-[calc(100%-90px)] h-12 ${
             disabled ? "opacity-50 cursor-not-allowed" : ""
           }`}
           placeholder="Type your guess..."
@@ -71,13 +68,13 @@ const GuessBar = ({
         />
         <button
           type="submit"
-          className={`flex ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+          className={`ml-3 ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           disabled={disabled}
         >
           <img
             src="/images/send.png"
             alt="send"
-            className="object-contain w-10 h-10 ml-3 mb-4 mr-3"
+            className="object-contain w-10 h-10"
           />
         </button>
       </div>

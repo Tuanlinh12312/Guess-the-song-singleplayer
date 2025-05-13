@@ -4,7 +4,7 @@ const RoundTimer = ({ timeCap, isPlaying, onTimeOut, timeLeft, setTimeLeft }) =>
   useEffect(() => {
     if (!isPlaying) return;
 
-    setTimeLeft(timeCap); // Reset timer at start
+    setTimeLeft(timeCap); 
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -20,8 +20,10 @@ const RoundTimer = ({ timeCap, isPlaying, onTimeOut, timeLeft, setTimeLeft }) =>
   }, [timeCap, isPlaying]);
 
   return (
-    <div className="w-20 h-20 rounded-full bg-b1 flex items-center justify-center text-orange-950 text-center text-4xl font-coiny pt-2 pl-1">
-      {timeLeft}
+    <div className="w-20 h-20 rounded-full bg-b1 flex items-center justify-center text-orange-950 text-center text-4xl font-coiny relative">
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-1">
+        {timeLeft}
+      </div>
     </div>
   );
 };

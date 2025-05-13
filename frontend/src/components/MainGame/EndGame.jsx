@@ -12,7 +12,7 @@ const EndGame = ({
   totalTitles,
   diff,
 }) => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const bestRound =
     roundScores.length > 0
@@ -274,7 +274,6 @@ const EndGame = ({
         </>
       )}
 
-
       <h2 className="text-8xl font-bold font-darumadrop text-center drop-shadow-[4px_4px_0px_white] -mt-3">
         Game Over
       </h2>
@@ -322,29 +321,29 @@ const EndGame = ({
           </div>
 
           {bestRound && bestRound.song && (
-            <div className="flex flex-col bg-amber-900/10 items-center ml-10 w-1/2 rounded-2xl">
-              <p className="text-2xl mt-5 font-bold font-coiny drop-shadow-[2px_2px_0px_white] uppercase">
+            <div className="flex flex-col bg-amber-900/10 items-center ml-[40px] w-[700px] rounded-2xl">
+              <p className="text-2xl mt-[20px] font-bold font-coiny drop-shadow-[2px_2px_0px_white] uppercase">
                 Best round
               </p>
 
-              <div className="bg-white bg-opacity-50 p-4 rounded-2xl shadow-lg flex items-center gap-4 mt-2 justify-between w-4/5 mx-4">
+              <div className="bg-white bg-opacity-50 p-[16px] rounded-2xl shadow-lg flex items-center gap-[16px] mt-[8px] justify-between w-[550px] mx-[16px]">
                 <img
                   src={bestRound.song.thumbnail}
                   alt="Song Thumbnail"
-                  className="w-16 h-16 rounded-lg object-cover"
+                  className="w-[64px] h-[64px] rounded-lg object-cover"
                   onError={(e) => (e.target.src = "/images/pod18397-1.jpg")}
                 />
-                <div className="flex-1 flex flex-col ml-2">
-                  <span className="text-lg font-bold text-gray-900 uppercase -mb-1">
+                <div className="flex flex-col ml-[8px] w-[calc(100%-80px)]">
+                  <span className="text-lg font-bold text-gray-900 uppercase -mb-[4px] truncate">
                     {bestRound.song.title}
                   </span>
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm text-gray-700 truncate">
                     {bestRound.song.artists?.join(", ")}
                   </span>
                   <img
                     src={icon}
                     alt="Icon"
-                    className="w-full mt-2 rounded-full"
+                    className="w-full mt-[8px] rounded-full"
                   />
                 </div>
               </div>
@@ -353,7 +352,7 @@ const EndGame = ({
         </div>
       </div>
       <button
-        className="flex justify-center -mt-14 items-center relative w-60 h-72"
+        className="flex justify-center items-center relative w-[240px] h-[288px] mt-[-60px]"
         onClick={handlePlayAgain}>
         <img
           src="/images/icon1.png"

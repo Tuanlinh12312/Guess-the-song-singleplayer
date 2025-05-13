@@ -28,7 +28,6 @@ const SongPlayer = ({ song, onPlay, roundEnded }) => {
   };
 
   const handleStateChange = (event) => {
-    // 1 = playing
     if (event.data === 1 && typeof onPlay === "function") {
       onPlay();
     }

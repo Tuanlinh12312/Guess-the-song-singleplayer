@@ -73,7 +73,7 @@ const GameSetup = () => {
 
   return (
     <div className="bg-image h-screen bg-cover bg-center bg-fixed">
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center px-4">
         <img
           src="images/logo.png"
           alt="Guess the Song Logo"
@@ -113,7 +113,7 @@ const GameSetup = () => {
           <h3 className="text-left mr-auto ml-20 font-bold text-2xl mt-2 font-Roboto text-white drop-shadow-[2px_1px_0px_black]">
             Now Playing
           </h3>
-          <h4 className="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_black]">
+          <h4 className="text-left mr-auto ml-20 text-l font-Roboto text-white drop-shadow-[2px_1px_0px_0px_black]">
             Your Favourite Playlist
           </h4>
           <img
