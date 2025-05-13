@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 
-const StartGameButton = ({ rounds, songs, time }) => {
+const StartGameButton = ({ round, songs, time }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
   const handleStartGame = async () => {
-    if (rounds <= 0 || rounds > songs.length) {
-      alert("Invalid number of rounds");
+    if (round <= 0 || round > songs.length) {
+      alert("Please enter a valid number of rounds");
       return;
     }
     if (songs.length === 0) {
@@ -25,10 +25,12 @@ const StartGameButton = ({ rounds, songs, time }) => {
     setErrorMessage(null);
 
     try {
-      await api.post("/UploadSong", songs);
-      await api.patch("/UpdateTime", { time });
-      await api.post("/UpdateRound", { round: rounds });
-      await api.put("/StartGame");
+      // Single API call to initialize game
+      await api.post("/StartGame", {
+        songs,
+        time,
+        round,
+      });
 
       navigate("/game");
     } catch (err) {

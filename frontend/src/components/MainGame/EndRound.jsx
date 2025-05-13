@@ -25,6 +25,7 @@ const EndRound = ({ song, onNextRound }) => {
             src={song.thumbnail}
             alt="Song Thumbnail"
             className="w-16 h-16 rounded-lg object-cover"
+            onError={(e) => (e.target.src = "/images/pod18397-1.jpg")}
           />
 
           <div className="flex-1 flex flex-col ml-2">

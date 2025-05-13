@@ -22,7 +22,7 @@ const SongInput = ({ onAddSong }) => {
       <input
         name="url"
         type="text"
-        placeholder="Enter YouTube Music URL"
+        placeholder="Enter Song Name or YouTube Music URL"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         className="border border-gray-300 rounded px-3 py-1 flex-1 w-3/4 font-EBGaramond"

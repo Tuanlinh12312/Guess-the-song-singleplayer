@@ -11,14 +11,28 @@ import (
 	"github.com/raitonoberu/ytmusic"
 )
 
-func extractVideoID(url string) (string, error) {
+func extractVideoID(input string) (string, error) {
+	// Check if input is a YouTube URL
 	re := regexp.MustCompile(`(?:v=|\/)([0-9A-Za-z_-]{11})`)
-	matches := re.FindStringSubmatch(url)
+	matches := re.FindStringSubmatch(input)
 
 	if len(matches) > 1 {
 		return matches[1], nil
 	}
-	return "", fmt.Errorf("invalid URL")
+
+	// Otherwise, treat it as a search query
+	search := ytmusic.Search(input)
+	result, err := search.Next()
+	if err != nil {
+		return "", fmt.Errorf("search failed: %v", err)
+	}
+
+	if len(result.Tracks) == 0 {
+		return "", fmt.Errorf("no tracks found for query: %s", input)
+	}
+
+	// Return the video ID of the first track
+	return result.Tracks[0].VideoID, nil
 }
 
 func fixTitle(title *string, artists *[]string) {

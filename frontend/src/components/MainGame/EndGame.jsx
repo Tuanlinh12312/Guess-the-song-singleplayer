@@ -279,7 +279,7 @@ const EndGame = ({
         Game Over
       </h2>
 
-      <div className="flex flex-col w-[calc(33.33%-100px)] h-[190px] items-center mt-4 bg-amber-900/10 relative z-10">
+      <div className="flex flex-col w-[calc(33.33%-100px)] h-[190px] items-center mt-4 bg-amber-900/10 relative z-10 rounded-2xl">
         <p className="text-5xl mt-4 font-extrabold font-coiny">
           <div>RANK</div>
           <span
@@ -297,7 +297,7 @@ const EndGame = ({
       <div className="flex w-full h-60">
         <div className="flex flex-row ml-10 mr-10 mt-8 w-full">
           <div className="relative h-full bg-image w-[calc(33.33%-120px)] mr-10">
-            <div className="flex flex-col bg-amber-900/10 w-full h-full items-center">
+            <div className="flex flex-col bg-amber-900/10 w-full h-full items-center rounded-2xl">
               <h2 className="text-2xl mt-5 font-bold font-coiny text-center drop-shadow-[2px_2px_0px_white] uppercase">
                 You have guessed
               </h2>
@@ -312,7 +312,7 @@ const EndGame = ({
             </div>
           </div>
 
-          <div className="flex flex-col bg-amber-900/10 items-center w-[calc(33.33%-120px)]">
+          <div className="flex flex-col bg-amber-900/10 items-center w-[calc(33.33%-120px)] rounded-2xl">
             <h3 className="text-2xl mt-5 font-bold font-coiny drop-shadow-[2px_2px_0px_white] uppercase">
               Perfect rounds
             </h3>
@@ -322,7 +322,7 @@ const EndGame = ({
           </div>
 
           {bestRound && bestRound.song && (
-            <div className="flex flex-col bg-amber-900/10 items-center ml-10 w-1/2">
+            <div className="flex flex-col bg-amber-900/10 items-center ml-10 w-1/2 rounded-2xl">
               <p className="text-2xl mt-5 font-bold font-coiny drop-shadow-[2px_2px_0px_white] uppercase">
                 Best round
               </p>
@@ -332,6 +332,7 @@ const EndGame = ({
                   src={bestRound.song.thumbnail}
                   alt="Song Thumbnail"
                   className="w-16 h-16 rounded-lg object-cover"
+                  onError={(e) => (e.target.src = "/images/pod18397-1.jpg")}
                 />
                 <div className="flex-1 flex flex-col ml-2">
                   <span className="text-lg font-bold text-gray-900 uppercase -mb-1">
