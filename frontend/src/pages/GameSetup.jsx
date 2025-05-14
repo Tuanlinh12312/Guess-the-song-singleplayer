@@ -5,12 +5,15 @@ import SongInput from "../components/GameSetup/SongInput";
 import SongList from "../components/GameSetup/SongList";
 import StartGameButton from "../components/GameSetup/StartGameButton";
 import GuessTime from "../components/GameSetup/GuessTime";
+import CharacterSelector from "../components/GameSetup/CharacterSelector";
 
 const GameSetup = () => {
   const [rounds, setRounds] = useState(0);
   const [songs, setSongs] = useState([]);
   const [time, setTime] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [selectedCharacter, setSelectedCharacter] = useState(0);
+
 
   const handleAddSong = async (url, cnt) => {
     const isDuplicate = (newSong) =>
@@ -83,6 +86,8 @@ const GameSetup = () => {
           Guess the Song
         </h1>
       </div>
+      <CharacterSelector onSelectCharacter={setSelectedCharacter} />
+
 
       <div className="flex -mt-7 h-[calc(100%-230px)]">
         <SongList songs={songs} onDeleteSong={handleDeleteSong} />
@@ -124,7 +129,7 @@ const GameSetup = () => {
         </div>
       </div>
 
-      <StartGameButton round={rounds} songs={songs} time={time} />
+      <StartGameButton round={rounds} songs={songs} time={time} character={selectedCharacter} />
     </div>
   );
 };
